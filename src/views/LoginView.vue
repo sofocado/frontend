@@ -1,9 +1,16 @@
 <template>
   <div class="login">
-    <input type="text" placeholder="Username" v-model="info.username" />
-    <input type="password" placeholder="Password" v-model="info.password" />
-
-    <button @click="onLogin()">Sign In</button>
+    <a-form layout="vertical" :model="info">
+      <a-form-item label="Username">
+        <a-input v-model:value="info.username" placeholder="Username" :rules="[{ required: true }]" />
+      </a-form-item>
+      <a-form-item label="Password">
+        <a-input-password v-model:value="info.password" placeholder="Password" :rules="[{ required: true }]" />
+      </a-form-item>
+      <a-form-item>
+        <a-button type="primary" html-type="submit" @click="onLogin()">Sign In</a-button>
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 
@@ -36,4 +43,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login {
+  padding: 30px;
+}
+</style>

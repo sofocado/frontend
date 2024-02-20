@@ -1,80 +1,72 @@
 <template>
   <div class="dashboard">
     <h2>Add Restaurant</h2>
-    <form @submit.prevent="onAddRestaurant">
-      <label for="name">Name:</label>
-      <input type="text" id="name" v-model="restaurant.name" required /><br />
 
-      <label for="description">Description:</label>
-      <input
-        type="text"
-        id="description"
-        v-model="restaurant.description"
-      /><br />
+    <a-form layout="vertical" :model="info">
+      <a-row wrap :gutter="[16, 0]">
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Name">
+            <a-input v-model:value="info.name" placeholder="Name" />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Description">
+            <a-input
+              v-model:value="info.description"
+              placeholder="Description"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Address">
+            <a-input v-model:value="info.address" placeholder="Name" />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Work Time">
+            <a-time-range-picker v-model:value="info.time" format="HH:mm"/>
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Table">
+            <a-input type="number" v-model:value="info.countTable" placeholder="Count Table" />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
 
-      <label for="address">Address:</label>
-      <input type="text" id="address" v-model="restaurant.address" /><br />
-
-      <label for="startTime">Start Time:</label>
-      <input
-        type="number"
-        id="startTime"
-        v-model="restaurant.startTime"
-      /><br />
-
-      <label for="endTime">End Time:</label>
-      <input type="number" id="endTime" v-model="restaurant.endTime" /><br />
-
-      <label for="countTable">Count Table:</label>
-      <input
-        type="number"
-        id="countTable"
-        v-model="restaurant.countTable"
-      /><br />
-
-      <button type="submit">Add Restaurant</button>
-    </form>
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <a-button type="primary" @click="restaurantAdd()">Send</a-button>
   </div>
 </template>
 
 <script>
+import { RestaurantApi } from "@/api/restaurant";
+
 export default {
   data() {
     return {
-      restaurant: {
+      info: {
         name: "",
         description: "",
         address: "",
-        startTime: 0,
-        endTime: 0,
+        time: '',
         countTable: 0,
       },
-      errorMessage: "",
     };
   },
   methods: {
-    async onAddRestaurant() {
-      try {
-        const response = await fetch("http://localhost:1001/restaurant/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(this.restaurant),
+    restaurantAdd() {
+      RestaurantApi("add", this.info)
+        .then((res) => {
+          if (res.result_code === 0) {
+            console.log("ok");
+          } else {
+            console.log("Error");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
-
-        if (response.ok) {
-          console.log("Restaurant added successfully.");
-          // Дополнительные действия при успешном добавлении ресторана
-        } else {
-          const errorData = await response.json();
-          this.errorMessage = errorData.message;
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        this.errorMessage = "An error occurred. Please try again later.";
-      }
     },
   },
 };
