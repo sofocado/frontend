@@ -6,7 +6,6 @@ function request(options) {
   return new Promise((resolve, reject) => {
     axios({
       baseURL: baseURL,
-      methods: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
       },

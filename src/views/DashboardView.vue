@@ -22,11 +22,11 @@
             <a-input v-model:value="info.address" placeholder="Name" />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
+        <!-- <a-col :xs="24" :sm="16" :lg="6">
           <a-form-item label="Work Time">
-            <a-time-range-picker v-model:value="info.time" format="HH:mm"/>
+            <a-time-range-picker v-model="info.time" format="HH:mm"/>
           </a-form-item>
-        </a-col>
+        </a-col> -->
         <a-col :xs="24" :sm="16" :lg="6">
           <a-form-item label="Table">
             <a-input type="number" v-model:value="info.countTable" placeholder="Count Table" />
@@ -49,7 +49,7 @@ export default {
         name: "",
         description: "",
         address: "",
-        time: '',
+        // time: [],
         countTable: 0,
       },
     };
@@ -60,6 +60,7 @@ export default {
         .then((res) => {
           if (res.result_code === 0) {
             console.log("ok");
+            this.$router.push({ name: "Profile" });
           } else {
             console.log("Error");
           }

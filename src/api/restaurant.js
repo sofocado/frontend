@@ -2,7 +2,7 @@ import http from "../utils/http";
 
 export function RestaurantApi(url, data, method) {
   let info = {
-    url: "/restaurant/" + url,
+    url: "restaurant/" + url,
   };
   if (method == "GET") {
     info["method"] = "GET";
