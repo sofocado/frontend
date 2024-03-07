@@ -10,6 +10,9 @@
       <a-form-item>
         <a-button type="primary" html-type="submit" @click="onLogin()">Sign In</a-button>
       </a-form-item>
+      <a-form-item>
+        <a-button type="primary" html-type="submit" @click="onRegister()">Register</a-button>
+      </a-form-item>
     </a-form>
   </div>
 </template>
@@ -39,6 +42,19 @@ export default {
           console.log(error);
         });
     },
+    onRegister() {
+      AuthorizationApi("register", this.info)
+        .then((res) => {
+          if (res.result_code === 0) {
+            console.log("Ok");
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
+            this.$router.push({ name: "Dashboard" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>

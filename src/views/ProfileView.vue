@@ -1,11 +1,13 @@
 <template>
-  <div v-if="dataList.length > 0">
-    <div v-for="(item, index) in dataList" :key="index">
-      <span>{{ item.name }}</span>
-      <span>{{ item.description }}</span>
-      <span>{{ item.address }}</span>
-      <span>{{ item.countTable }}</span>
+  <div>
+    <div>
+      <span>{{ userInfo.name }}</span>
+      <span>{{ userInfo.description }}</span>
+      <span>{{ userInfo.address }}</span>
+      <span>{{ userInfo.countTable }}</span>
     </div>
+
+    <a-button type="primary" @click="editProfile()">Edit</a-button>
   </div>
 </template>
 
@@ -15,7 +17,7 @@ import { RestaurantApi } from "@/api/restaurant";
 export default {
   data() {
     return {
-      dataList: [],
+      userInfo: {},
     };
   },
   mounted() {
@@ -23,10 +25,23 @@ export default {
   },
   methods: {
     loadData() {
-      RestaurantApi("list", {}).then((res) => {
+      RestaurantApi("get", {
+        name: "Shafran",
+      }).then((res) => {
         if (res.result_code === 0) {
-          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
+          this.userInfo = JSON.parse(JSON.stringify(res.data));
+          console.log(this.userInfo._id);
+        } else {
+          console.log("Error");
         }
+      });
+    },
+    editProfile() {
+      this.$router.push({
+        name: "ProfileUpdate",
+        params: {
+          id: this.userInfo._id, 
+        },
       });
     },
   },

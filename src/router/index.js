@@ -17,6 +17,17 @@ const routes = [
     name: "Profile",
     component: () => import("../views/ProfileView.vue"),
   },
+  {
+    path: "/admin/profile/update",
+    name: "ProfileUpdate",
+    component: () => import("../views/ProfileUpdate.vue"),
+  },
+
+  {
+    path: "/admin/list",
+    name: "RestaurantList",
+    component: () => import("../views/RestaurantList.vue"),
+  },
 ];
 
 const router = createRouter({
