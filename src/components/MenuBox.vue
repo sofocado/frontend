@@ -22,11 +22,6 @@
         <span>Reservations</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item key="Notifications">
-      <router-link :to="{ name: 'Notifications' }">
-        <span>Notifications</span>
-      </router-link>
-    </a-menu-item>
     <a-menu-item key="Pre-Order">
       <router-link :to="{ name: 'Pre-Order' }">
         <span>Pre-Order</span>

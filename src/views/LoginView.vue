@@ -45,7 +45,7 @@
               <a-button class="button" type="primary" html-type="submit" @click="onLogin()"
                 >Log In</a-button >
             </a-form-item>
-          </a-form>
+    </a-form>
         </a-col>
       </a-row>
     </div>
@@ -80,6 +80,19 @@ export default {
           console.log(error);
         });
     },
+    onRegister() {
+      AuthorizationApi("register", this.info)
+        .then((res) => {
+          if (res.result_code === 0) {
+            console.log("Ok");
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
+            this.$router.push({ name: "Dashboard" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
@@ -88,7 +101,7 @@ export default {
 .all {
   color: black;
   height: 100vh;
-  background-color: #d9d9d9;
+  background-color: rgb(41, 75, 41);
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .login {

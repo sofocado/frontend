@@ -7,12 +7,11 @@
         <a-col :span="18" class="Box">
           <div class="header">
             <h2>{{ $route.params.username }}</h2>
-            <a-input-search
-              v-model:value="value"
-              placeholder="input search text"
-              style="width: 200px"
-              @search="onSearch"
-            />
+            <a-button type="link" style="color: black">
+              <router-link :to="{ name: 'Notifications' }">
+                <BellOutlined style="font-size: 170%" />
+              </router-link></a-button
+            >
           </div>
           <router-view class="content"></router-view>
         </a-col>
@@ -26,11 +25,12 @@
 <script>
 import { defineComponent, reactive, toRefs } from "vue";
 import MenuBox from "@/components/MenuBox.vue";
+import { BellOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
-
   components: {
     MenuBox,
+    BellOutlined,
   },
   setup() {
     const state = reactive({
@@ -50,7 +50,7 @@ export default defineComponent({
 
 <style scoped>
 .admin {
-  background-color: rgb(210, 210, 210);
+  background-color: rgb(41, 75, 41);
   min-height: 100vh;
   overflow-y: scroll;
 }
@@ -74,7 +74,7 @@ export default defineComponent({
 .header {
   display: flex;
   flex-direction: row;
-  gap: 10%;
+  gap: 82%;
   background-color: white;
   border: 1px solid #d9d9d9;
   border-radius: 15px;

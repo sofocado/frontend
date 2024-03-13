@@ -3,6 +3,8 @@
       <h3> Restaurant Name: {{ dataList[dataList.length-1].name }}</h3>
       <h3>Description: {{ dataList[dataList.length-1].description }}</h3>
       <h3>Address: {{ dataList[dataList.length-1].address }}</h3>
+      <h3>Work time starts: {{ dataList[dataList.length-1].workstarttime }}</h3>
+      <h3>Work time ends: {{ dataList[dataList.length-1].workendtime }}</h3>
       <h3>Count of tables: {{ dataList[dataList.length-1].countTable }}</h3>
     </div>
 </template>

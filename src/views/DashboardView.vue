@@ -1,46 +1,50 @@
 <template>
   <div class="dashboard">
     <h2>Add Restaurant</h2>
-
     <a-form layout="vertical" :model="info">
-      <a-col :xs="24" :sm="16" :lg="10">
-        <a-form-item label="Name">
-          <a-input v-model:value="info.name" placeholder="name"  />
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :sm="16" :lg="10">
-        <a-form-item label="Description">
-          <a-textarea
-            v-model:value="info.description"
-            placeholder="Autosize height with minimum and maximum number of lines"
+      <a-row wrap :gutter="[16, 0]">
+        <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Name">
+            <a-input v-model:value="info.name" placeholder="Name" />
+          </a-form-item>
+        </a-col>
+         <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Description">
+            <a-input
+              v-model:value="info.description"
+               placeholder="Autosize height with minimum and maximum number of lines"
             :auto-size="{ minRows: 2, maxRows: 5 }"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :sm="16" :lg="10">
-        <a-form-item label="Address">
-          <a-input v-model:value="info.address" placeholder="Name" />
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Address">
+            <a-input v-model:value="info.address" placeholder="Name" />
+          </a-form-item>
+        </a-col>
+         <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work Start Time">
             <a-time-picker
-              :value="info.workstarttime ? $dayjs(info.workstarttime * 1000) : null"
+              :value="
+                info.workstarttime ? $dayjs(info.workstarttime * 1000) : null
+              "
               format="HH:mm"
               @change="(e) => (info.workstarttime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+       <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work End Time">
             <a-time-picker
-              :value="info.workendtime ? $dayjs(info.workendtime * 1000) : null"
+              :value="
+                info.workendtime ? $dayjs(info.workendtime * 1000) : null
+              "
               format="HH:mm"
               @change="(e) => (info.workendtime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
-      <a-col :xs="24" :sm="16" :lg="10">
+     <a-col :xs="24" :sm="10" :lg="12">
         <a-form-item label="Count of Tables">
           <a-input
             type="number"
@@ -49,7 +53,7 @@
           />
         </a-form-item>
       </a-col>
-      <!-- <a-upload
+      <a-upload
         v-model:file-list="fileList"
         name="avatar"
         list-type="picture-card"
@@ -65,7 +69,8 @@
       <plus-outlined v-else></plus-outlined>
       <div class="ant-upload-text">Upload</div>
     </div>
-      </a-upload> -->
+      </a-upload>
+      </a-row>
     </a-form>
 
     <a-button class="button" type="primary" @click="restaurantAdd()"
@@ -77,15 +82,34 @@
 <script>
 import { RestaurantApi } from "@/api/restaurant";
 
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 export default {
+  components: {
+
+  },
   data() {
     return {
+      previewVisible: false,
+      previewImage: '',
+      previewTitle: '',
+      fileList: [],
       info: {
         name: "",
         description: "",
         address: "",
-        // time: [],
+        workstarttime: 0,
+        workendtime: 0,
         countTable: 0,
+        img_url: "",
       },
     };
   },
@@ -104,6 +128,25 @@ export default {
           console.log(error);
         });
     },
+    handleCancel() {
+      this.previewVisible = false
+      this.previewTitle = ''
+    },
+    async handlePreview(file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+      }
+      this.previewImage = file.url || file.preview;
+      this.previewVisible = true;
+      this.previewTitle = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
+    },
+    customRequest() {
+      RestaurantApi("add", this.info).then((res) => {
+        if(res.result_code === 0) {
+          console.log('ok')
+        }
+      })
+    }
   },
 };
 </script>

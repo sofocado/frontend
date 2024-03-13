@@ -60,6 +60,17 @@ const routes = [
     ]
   },
   
+  {
+    path: "/admin/profile/update",
+    name: "ProfileUpdate",
+    component: () => import("../views/ProfileUpdate.vue"),
+  },
+
+  {
+    path: "/admin/list",
+    name: "RestaurantList",
+    component: () => import("../views/RestaurantList.vue"),
+  },
 ];
 
 const router = createRouter({

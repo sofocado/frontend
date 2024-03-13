@@ -1,5 +1,17 @@
 <template>
-   <a-table :dataSource="dataList" :columns="columns" />
+  <a-table :dataSource="dataList" :columns="columns">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'actions'">
+        <a-popconfirm
+          v-if="dataList.length"
+          title="Sure to delete?"
+          @confirm="onDelete(record.itemName)"
+        >
+          <a>Delete</a>
+        </a-popconfirm>
+      </template>
+    </template>
+  </a-table>
 </template>
 
 <script>
@@ -33,7 +45,6 @@ const columns = [
   },
 ];
 
-
 export default {
   data() {
     return {
@@ -55,7 +66,16 @@ export default {
           console.log(error);
         });
     },
+    onDelete(key) {
+      console.log(key);
+       MenuApi("delete", {key})
+        .then(() => {
+          this.loadData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
-
 };
 </script>

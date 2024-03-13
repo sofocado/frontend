@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
+import config from "@/config/index.js";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -17,6 +18,8 @@ app.config.globalProperties.$timeFormat = timeFormat;
 app.config.globalProperties.$getHourMinute = getHourMinute;
 app.config.globalProperties.$toTimeStamp = toTimeStamp;
 app.config.globalProperties.$dayjs = dayjs;
+app.config.globalProperties.$getFileName = getFileName;
+app.config.globalProperties.$getFileUrl = getFileUrl;
 
 function timeFormat(t, hm) {
   if (!t) {
@@ -75,4 +78,22 @@ function toTimeStamp(time) {
   } else {
     return e;
   }
+}
+
+function getFileName(url) {
+  if (url && typeof url === "string") {
+    if (url.indexOf("/") == -1) {
+      return url;
+    }
+    return url.split("/")[url.split("/").length - 1];
+  } else {
+    return "";
+  }
+}
+
+function getFileUrl(url) {
+  if (url.indexOf("http") == 0) {
+    return url;
+  }
+  return config.baseURL + url;
 }
