@@ -1,29 +1,29 @@
 <template>
   <div class="dashboard">
     <h2>Add Restaurant</h2>
-
     <a-form layout="vertical" :model="info">
       <a-row wrap :gutter="[16, 0]">
-        <a-col :xs="24" :sm="16" :lg="6">
+        <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Name">
             <a-input v-model:value="info.name" placeholder="Name" />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
+         <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Description">
             <a-input
               v-model:value="info.description"
-              placeholder="Description"
+               placeholder="Autosize height with minimum and maximum number of lines"
+            :auto-size="{ minRows: 2, maxRows: 5 }"
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
+        <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Address">
             <a-input v-model:value="info.address" placeholder="Name" />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+         <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work Start Time">
             <a-time-picker
               :value="
                 info.workstarttime ? $dayjs(info.workstarttime * 1000) : null
@@ -33,59 +33,55 @@
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+       <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work End Time">
             <a-time-picker
-              :value="info.workendtime ? $dayjs(info.workendtime * 1000) : null"
+              :value="
+                info.workendtime ? $dayjs(info.workendtime * 1000) : null
+              "
               format="HH:mm"
               @change="(e) => (info.workendtime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Table">
-            <a-input
-              type="number"
-              v-model:value="info.countTable"
-              placeholder="Count Table"
-            />
-          </a-form-item>
-        </a-col>
-
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Img">
-            <a-upload
-              v-model:file-list="fileList"
-              @customRequest = 'customRequest'
-              list-type="picture-card"
-              @preview="handlePreview"
-            >
-              <div v-if="fileList.length < 8">
-                <plus-outlined />
-                <div style="margin-top: 8px">Upload</div>
-              </div>
-            </a-upload>
-
-            <a-modal
-              :visible="previewVisible"
-              :title="previewTitle"
-              :footer="null"
-              @cancel="handleCancel"
-            >
-              <img alt="example" style="width: 100%" :src="previewImage" />
-            </a-modal>
-          </a-form-item>
-        </a-col>
+     <a-col :xs="24" :sm="10" :lg="12">
+        <a-form-item label="Count of Tables">
+          <a-input
+            type="number"
+            v-model:value="info.countTable"
+            placeholder="Count Table"
+          />
+        </a-form-item>
+      </a-col>
+      <a-upload
+        v-model:file-list="fileList"
+        name="avatar"
+        list-type="picture-card"
+        class="avatar-uploader"
+        :show-upload-list="false"
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        :before-upload="beforeUpload"
+        @change="handleChange"
+      >
+       <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+    <div v-else>
+      <loading-outlined v-if="loading"></loading-outlined>
+      <plus-outlined v-else></plus-outlined>
+      <div class="ant-upload-text">Upload</div>
+    </div>
+      </a-upload>
       </a-row>
     </a-form>
 
-    <a-button type="primary" @click="restaurantAdd()">Send</a-button>
+    <a-button class="button" type="primary" @click="restaurantAdd()"
+      >Send</a-button
+    >
   </div>
 </template>
 
 <script>
 import { RestaurantApi } from "@/api/restaurant";
-import { PlusOutlined } from '@ant-design/icons-vue';
+
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -98,7 +94,7 @@ function getBase64(file) {
 
 export default {
   components: {
-    PlusOutlined,
+
   },
   data() {
     return {
@@ -121,9 +117,9 @@ export default {
     restaurantAdd() {
       RestaurantApi("add", this.info)
         .then((res) => {
-          if (res.result_code === 0) {
+          if (res.message == "Restaurant added successfully") {
             console.log("ok");
-            this.$router.push({ name: "Profile" });
+            this.$router.push({ name: "Profile", params: {id: res.data._id}});
           } else {
             console.log("Error");
           }
@@ -155,4 +151,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.button {
+  width: 150px;
+  background-color: black;
+  border-radius: 20px;
+}
+.button:hover {
+  background-color: rgb(210, 210, 210);
+  color: black;
+  border: 1px solid black;
+}
+</style>
