@@ -18,7 +18,7 @@ const routes = [
     component: () => import("../views/ProfileView.vue"),
   },
   {
-    path: "/admin/profile/update",
+    path: "/admin/profile/update/:rid",
     name: "ProfileUpdate",
     component: () => import("../views/ProfileUpdate.vue"),
   },

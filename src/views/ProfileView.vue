@@ -5,6 +5,7 @@
       <span>{{ userInfo.description }}</span>
       <span>{{ userInfo.address }}</span>
       <span>{{ userInfo.countTable }}</span>
+      <img :src="'http://192.168.1.161:1001/' + userInfo.path" alt="" />
     </div>
 
     <a-button type="primary" @click="editProfile()">Edit</a-button>
@@ -25,12 +26,12 @@ export default {
   },
   methods: {
     loadData() {
+      // const rid = this.$route.params.rid;
       RestaurantApi("get", {
-        name: "Shafran",
+        rid: "080856f5-489d-49e4-9584-ac935acd673a",
       }).then((res) => {
         if (res.result_code === 0) {
           this.userInfo = JSON.parse(JSON.stringify(res.data));
-          console.log(this.userInfo._id);
         } else {
           console.log("Error");
         }
@@ -40,7 +41,7 @@ export default {
       this.$router.push({
         name: "ProfileUpdate",
         params: {
-          id: this.userInfo._id, 
+          rid: this.userInfo.rid,
         },
       });
     },

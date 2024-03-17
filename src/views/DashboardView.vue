@@ -56,16 +56,16 @@
           <a-form-item label="Img">
             <a-upload
               v-model:file-list="fileList"
-              @customRequest = 'customRequest'
+              action="http://192.168.1.161:1001/upload/file"
               list-type="picture-card"
               @preview="handlePreview"
+              name="files"
             >
               <div v-if="fileList.length < 8">
                 <plus-outlined />
                 <div style="margin-top: 8px">Upload</div>
               </div>
             </a-upload>
-
             <a-modal
               :visible="previewVisible"
               :title="previewTitle"
@@ -85,14 +85,14 @@
 
 <script>
 import { RestaurantApi } from "@/api/restaurant";
-import { PlusOutlined } from '@ant-design/icons-vue';
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 }
 
@@ -103,8 +103,8 @@ export default {
   data() {
     return {
       previewVisible: false,
-      previewImage: '',
-      previewTitle: '',
+      previewImage: "",
+      previewTitle: "",
       fileList: [],
       info: {
         name: "",
@@ -113,12 +113,17 @@ export default {
         workstarttime: 0,
         workendtime: 0,
         countTable: 0,
-        img_url: "",
+        path: "",
       },
     };
   },
   methods: {
     restaurantAdd() {
+      if (this.fileList.length > 0) {
+        this.info.path = this.fileList[0].response.files[0].path;
+      } else {
+        this.info.path = ""; 
+      }
       RestaurantApi("add", this.info)
         .then((res) => {
           if (res.result_code === 0) {
@@ -133,8 +138,8 @@ export default {
         });
     },
     handleCancel() {
-      this.previewVisible = false
-      this.previewTitle = ''
+      this.previewVisible = false;
+      this.previewTitle = "";
     },
     async handlePreview(file) {
       if (!file.url && !file.preview) {
@@ -142,15 +147,9 @@ export default {
       }
       this.previewImage = file.url || file.preview;
       this.previewVisible = true;
-      this.previewTitle = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
+      this.previewTitle =
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1);
     },
-    customRequest() {
-      RestaurantApi("add", this.info).then((res) => {
-        if(res.result_code === 0) {
-          console.log('ok')
-        }
-      })
-    }
   },
 };
 </script>

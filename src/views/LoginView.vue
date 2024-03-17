@@ -2,7 +2,7 @@
   <div class="login">
     <a-form layout="vertical" :model="info">
       <a-form-item label="Username">
-        <a-input v-model:value="info.username" placeholder="Username" :rules="[{ required: true }]" />
+        <a-input v-model:value="info.phoneNumber" placeholder="Username" :rules="[{ required: true }]" />
       </a-form-item>
       <a-form-item label="Password">
         <a-input-password v-model:value="info.password" placeholder="Password" :rules="[{ required: true }]" />
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       info: {
-        username: "",
+        phoneNumber: "",
         password: "",
       },
     };
