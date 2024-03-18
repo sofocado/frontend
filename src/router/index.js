@@ -8,32 +8,32 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/admin/:id/:username",
+    path: "/admin",
     name: "Admin",
     component: () => import("../views/AdminView.vue"),
     children: [
       {
-        path: "dashboard",
+        path: "/dashboard",
         name: "Dashboard",
         component: () => import("../views/DashboardView.vue"),
       },
       {
-        path: "profile/:id",
+        path: "/profile",
         name: "Profile",
         component: () => import("../views/ProfileView.vue"),
       },
       {
-        path: "reservations",
+        path: "/reservations",
         name: "Reservations",
         component: () => import("../views/ReservationsView.vue"),
       },
       {
-        path: "notifications",
+        path: "/notifications",
         name: "Notifications",
         component: () => import("../views/NotifView.vue"),
       },
       {
-        path: "updateProfile",
+        path: "/updateProfile",
         name: "UpdatePage",
         component: () => import("../views/UpdateProfileView.vue"),
       },
@@ -57,11 +57,11 @@ const routes = [
         name: "Pre-Order",
         component: () => import("../views/PreOrderView.vue"),
       },
-    ]
+    ],
   },
-  
+
   {
-    path: "/admin/profile/update",
+    path: "/admin/profile/update/:rid",
     name: "ProfileUpdate",
     component: () => import("../views/ProfileUpdate.vue"),
   },

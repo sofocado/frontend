@@ -3,7 +3,7 @@ const config = {
 };
 
 function getBaseUrl() {
-  return "http://localhost:1001/";
+  return "http://172.20.10.3:1001";
 }
 
 export default config;

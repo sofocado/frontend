@@ -6,7 +6,7 @@
         <!-- <a-col :span="1"></a-col> -->
         <a-col :span="18" class="Box">
           <div class="header">
-            <h2>{{ $route.params.username }}</h2>
+            <!-- <h2>{{ $route.params.phoneNumber }}</h2> -->
             <a-button type="link" style="color: black">
               <router-link :to="{ name: 'Notifications' }">
                 <BellOutlined style="font-size: 170%" />

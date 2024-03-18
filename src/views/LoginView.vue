@@ -8,21 +8,21 @@
           <h2>Welcome to ReStoLike!!!</h2>
           <h3>Please Log in to your account</h3>
         </a-col>
-          <a-col :span="2" class="col2">  </a-col>
+        <a-col :span="2" class="col2"> </a-col>
         <a-col :span="11" class="col">
           <a-form layout="vertical" :model="info" class="form2">
-             <a-form-item>
-                <h1>Log In</h1>
-             </a-form-item>
+            <a-form-item>
+              <h1>Log In</h1>
+            </a-form-item>
             <a-form-item
               label="Restaurant name"
               name="username"
               :rules="[
                 { required: true, message: 'Please input your username!' },
               ]"
-            > 
+            >
               <a-input
-                v-model:value="info.username"
+                v-model:value="info.phoneNumber"
                 placeholder="Username"
                 :rules="[{ required: true }]"
               />
@@ -42,10 +42,15 @@
             </a-form-item>
 
             <a-form-item>
-              <a-button class="button" type="primary" html-type="submit" @click="onLogin()"
-                >Log In</a-button >
+              <a-button
+                class="button"
+                type="primary"
+                html-type="submit"
+                @click="onLogin()"
+                >Log In</a-button
+              >
             </a-form-item>
-    </a-form>
+          </a-form>
         </a-col>
       </a-row>
     </div>
@@ -58,22 +63,23 @@ export default {
   data() {
     return {
       info: {
-        username: "",
+        phoneNumber: "",
         password: "",
       },
     };
   },
   methods: {
     onLogin() {
-      AuthorizationApi("login", this.info, "POST")
+      AuthorizationApi("login", this.info)
         .then((res) => {
           if (res.result_code === 0) {
             console.log("Ok");
             localStorage.setItem("userInfo", JSON.stringify(res.data));
-            this.$router.push({ name: "Admin", params: { id: res.data.id, username: res.data.username }});
-          }
-          else{
-             console.log(res.message)
+            this.$router.push({
+              name: "Admin",
+            });
+          } else {
+            console.log(res.message);
           }
         })
         .catch((error) => {
@@ -92,7 +98,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
+    },
   },
 };
 </script>
@@ -102,7 +108,7 @@ export default {
   color: black;
   height: 100vh;
   background-color: rgb(41, 75, 41);
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .login {
   height: 100%;
@@ -112,7 +118,7 @@ export default {
   padding-top: 10%;
   justify-content: center;
 }
-.col{
+.col {
   background-color: white;
   text-align: center;
   height: 60vh;
@@ -120,18 +126,18 @@ export default {
   border: 1px solid rgb(163, 163, 163);
   border-radius: 20px;
   box-shadow: 2px 2px rgb(163, 163, 163);
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-.form2{
+.form2 {
   width: 300px;
   margin: auto;
 }
-.button{
+.button {
   width: 150px;
   background-color: black;
   border-radius: 20px;
 }
-.button:hover{
+.button:hover {
   background-color: rgb(210, 210, 210);
   color: black;
   border: 1px solid black;

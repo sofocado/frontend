@@ -1,12 +1,15 @@
 <template>
-  <div v-if = "dataList.length > 0">
-      <h3> Restaurant Name: {{ dataList[dataList.length-1].name }}</h3>
-      <h3>Description: {{ dataList[dataList.length-1].description }}</h3>
-      <h3>Address: {{ dataList[dataList.length-1].address }}</h3>
-      <h3>Work time starts: {{ dataList[dataList.length-1].workstarttime }}</h3>
-      <h3>Work time ends: {{ dataList[dataList.length-1].workendtime }}</h3>
-      <h3>Count of tables: {{ dataList[dataList.length-1].countTable }}</h3>
+  <div>
+    <div>
+      <span>{{ userInfo.name }}</span>
+      <span>{{ userInfo.description }}</span>
+      <span>{{ userInfo.address }}</span>
+      <span>{{ userInfo.countTable }}</span>
+      <img :src="'http://172.20.10.3:1001/' + userInfo.path" alt="" />
     </div>
+
+    <a-button type="primary" @click="editProfile()">Edit</a-button>
+  </div>
 </template>
 
 <script>
@@ -16,6 +19,7 @@ export default {
   data() {
     return {
       dataList: [],
+      userInfo: [],
     };
   },
   mounted() {
@@ -23,13 +27,24 @@ export default {
   },
   methods: {
     loadData() {
-      RestaurantApi("list", {}, "GET")
-       .then((res) => {
-          this.dataList = JSON.parse(JSON.stringify(res.data));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      // const rid = this.$route.params.rid;
+      RestaurantApi("get", {
+        rid: "f4915f3c-042a-48b0-bf55-5854bfae2ff6",
+      }).then((res) => {
+        if (res.result_code === 0) {
+          this.userInfo = JSON.parse(JSON.stringify(res.data));
+        } else {
+          console.log("Error");
+        }
+      });
+    },
+    editProfile() {
+      this.$router.push({
+        name: "ProfileUpdate",
+        params: {
+          rid: this.userInfo.rid,
+        },
+      });
     },
   },
 };
