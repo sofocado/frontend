@@ -2,28 +2,22 @@
   <div class="all">
     <div class="login">
       <a-row>
-        <a-col :span="11" class="col">
-          <h1>"Logo"</h1>
-          <h1>ReStoLike</h1>
-          <h2>Welcome to ReStoLike!!!</h2>
-          <h3>Please Log in to your account</h3>
-        </a-col>
-        <a-col :span="2" class="col2"> </a-col>
-        <a-col :span="11" class="col">
+        <a-col :span="13" class="col1">
           <a-form layout="vertical" :model="info" class="form2">
             <a-form-item>
               <h1>Log In</h1>
+              <h3>Please Log in to your account</h3>
             </a-form-item>
             <a-form-item
-              label="Restaurant name"
-              name="username"
+              label="Phone Number"
+              name="phoneNumber"
               :rules="[
-                { required: true, message: 'Please input your username!' },
+                { required: true, message: 'Please input your phone number!' },
               ]"
             >
               <a-input
                 v-model:value="info.phoneNumber"
-                placeholder="Username"
+                placeholder="Phone number"
                 :rules="[{ required: true }]"
               />
             </a-form-item>
@@ -52,6 +46,11 @@
             </a-form-item>
           </a-form>
         </a-col>
+        <a-col :span="11" class="col">
+          <img class="log_im" src="../images/login_img.jpg" alt="" />
+          <h1 style="margin-top: 5vh">ReStoLike</h1>
+          <h2>Welcome to ReStoLike!!!</h2>
+        </a-col>
       </a-row>
     </div>
   </div>
@@ -72,7 +71,7 @@ export default {
     onLogin() {
       AuthorizationApi("login", this.info)
         .then((res) => {
-          if (res.result_code === 0) {
+          if (res.result_code === 0 && res) {
             console.log("Ok");
             localStorage.setItem("userInfo", JSON.stringify(res.data));
             this.$router.push({
@@ -86,19 +85,19 @@ export default {
           console.log(error);
         });
     },
-    onRegister() {
-      AuthorizationApi("register", this.info)
-        .then((res) => {
-          if (res.result_code === 0) {
-            console.log("Ok");
-            localStorage.setItem("userInfo", JSON.stringify(res.data));
-            this.$router.push({ name: "Dashboard" });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // onRegister() {
+    //   AuthorizationApi("register", this.info)
+    //     .then((res) => {
+    //       if (res.result_code === 0) {
+    //         console.log("Ok");
+    //         localStorage.setItem("userInfo", JSON.stringify(res.data));
+    //         this.$router.push({ name: "Dashboard" });
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
   },
 };
 </script>
@@ -107,39 +106,52 @@ export default {
 .all {
   color: black;
   height: 100vh;
-  background-color: rgb(41, 75, 41);
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: rgb(37, 31, 77);
 }
 .login {
   height: 100%;
   margin-left: auto;
   margin-right: auto;
-  width: 800px;
-  padding-top: 10%;
+  width: 60vw;
+  padding-top: 5%;
   justify-content: center;
 }
 .col {
+  background-color: rgb(123, 102, 255);
+  text-align: center;
+  height: 80vh;
+  color: white;
+  padding-top: 17%;
+  border-radius: 20px;
+  box-shadow: 10px 12px 15px black;
+
+}
+.col1 {
   background-color: white;
   text-align: center;
-  height: 60vh;
-  padding-top: 10%;
-  border: 1px solid rgb(163, 163, 163);
-  border-radius: 20px;
-  box-shadow: 2px 2px rgb(163, 163, 163);
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  height: 80vh;
+  padding-top: 15%;
+  margin-right: -20px;
+  border-radius: 20px 0px 0px 20px;
+  box-shadow: 0px 12px 15px black;
 }
 .form2 {
-  width: 300px;
+  width: 20vw;
   margin: auto;
 }
 .button {
   width: 150px;
-  background-color: black;
+  background-color: rgb(123, 102, 255);
   border-radius: 20px;
 }
 .button:hover {
-  background-color: rgb(210, 210, 210);
-  color: black;
+  background-color: rgb(37, 31, 77);
+  color: white;
   border: 1px solid black;
+}
+.log_im {
+  width: 20vw;
+  height: 20vh;
+  border-radius: 20px;
 }
 </style>

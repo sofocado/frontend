@@ -3,55 +3,175 @@
     <h2>Add Restaurant</h2>
     <a-form layout="vertical" :model="info">
       <a-row wrap :gutter="[16, 0]">
-        <a-col :xs="24" :sm="10" :lg="12">
-          <a-form-item label="Name">
-            <a-input v-model:value="info.name" placeholder="Name" />
-          </a-form-item>
-        </a-col>
-        <a-col :xs="24" :sm="10" :lg="12">
-          <a-form-item label="Description">
+        <a-col :xs="24" :sm="16" :lg="12">
+          <a-form-item
+            label="Name"
+            :rules="[
+              {
+                required: true,
+                message: 'Please input the name of the restaurant!',
+              },
+            ]"
+          >
             <a-input
-              v-model:value="info.description"
-              placeholder="Autosize height with minimum and maximum number of lines"
-              :auto-size="{ minRows: 2, maxRows: 5 }"
+              v-model:value="info.name"
+              placeholder="Name"
+              :rules="[{ required: true }]"
             />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :sm="10" :lg="12">
-          <a-form-item label="Address">
-            <a-input v-model:value="info.address" placeholder="Name" />
+          <a-form-item
+            label="Address"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-input
+              v-model:value="info.address"
+              placeholder="Name"
+              :rules="[{ required: true }]"
+            />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="10" :lg="12">
-          <a-form-item label="Work Start Time">
+        <a-col :xs="24" :sm="16" :lg="24">
+          <a-form-item
+            label="Description"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-textarea
+              v-model:value="info.description"
+              placeholder="Autosize height with minimum and maximum number of lines"
+              :rules="[{ required: true }]"
+              :rows="4"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="10" :lg="4">
+          <a-form-item
+            label="Work Start Time"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
             <a-time-picker
               :value="
                 info.workstarttime ? $dayjs(info.workstarttime * 1000) : null
               "
+              :rules="[{ required: true }]"
               format="HH:mm"
               @change="(e) => (info.workstarttime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :sm="10" :lg="12">
-          <a-form-item label="Work End Time">
+          <a-form-item
+            label="Work End Time"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
             <a-time-picker
               :value="info.workendtime ? $dayjs(info.workendtime * 1000) : null"
               format="HH:mm"
+              :rules="[{ required: true }]"
               @change="(e) => (info.workendtime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
+        <a-col :xs="24" :sm="20" :lg="20">
+          <a-form-item
+            label="Category"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-select
+              v-model:value="info.category"
+            
+              show-search
+              placeholder="Select a person"
+              style="width: 200px"
+              :options="CategoryOptions"
+              :filter-option="filterOption"
+              @change="handleChange"
+            ></a-select>
+          </a-form-item>
+        </a-col>
         <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Table">
+          <a-form-item
+            label="Table"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
             <a-input
               type="number"
               v-model:value="info.countTable"
               placeholder="Count Table"
+              :rules="[{ required: true }]"
             />
           </a-form-item>
         </a-col>
 
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item
+            label="Phone"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-input
+              type="phoneNumber"
+              v-model:value="info.phone"
+              placeholder="Phone"
+              :rules="[{ required: true }]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item
+            label="Averagecheque"
+            :rules="[
+              { required: true, message: 'Please input your averageCheque!' },
+            ]"
+          >
+            <a-input
+              type="avgCheque"
+              v-model:value="info.avgCheque"
+              placeholder="Average cheque"
+              :rules="[{ required: true }]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item
+            label="Parking"
+            :rules="[{ required: true, message: 'Please input your parking!' }]"
+          >
+            <a-input
+              type="parking"
+              v-model:value="info.parking"
+              placeholder="Parking"
+              :rules="[{ required: true }]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="20" :lg="20">
+          <a-form-item
+            label="Praying"
+            :rules="[
+              { required: true, message: 'Please input your parking number!' },
+            ]"
+          >
+            <a-radio-group v-model:value="info.prayingRoom" name="radioGroup">
+              <a-radio value="1">Yes</a-radio>
+              <a-radio value="0">No</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
         <a-col :xs="24" :sm="16" :lg="6">
           <a-form-item label="Img">
             <a-upload
@@ -88,7 +208,11 @@
 
 <script>
 import { RestaurantApi } from "@/api/restaurant";
+import { AuthorizationApi } from "@/api/auth";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import { useAppStore } from "@/store/index.js";
+
+const plainOptions = ["Kazakh", "American", "Fast food"];
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -98,28 +222,59 @@ function getBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+const handleChange = (value) => {
+  console.log(`selected ${value}`);
+};
+const filterOption = (input, option) => {
+  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
+const CategoryOptions = [
+  {
+    label: "Kazakh",
+    value: "Kazakh",
+  },
+  {
+    label: "American",
+    value: "American",
+  },
+  {
+    label: "Fast Food",
+    value: "Fast Food",
+  },
+];
 
 export default {
   components: {
     PlusOutlined,
   },
+
   data() {
     return {
+      plainOptions,
+      CategoryOptions,
       previewVisible: false,
       previewImage: "",
       previewTitle: "",
       fileList: [],
+      handleChange,
+      filterOption,
       info: {
         name: "",
         description: "",
         address: "",
         workstarttime: 0,
         workendtime: 0,
+        category: "",
         countTable: 0,
         path: "",
+        phone: "",
+        avgCheque: 0,
+        parking: 0,
+        prayingRoom: 0,
       },
     };
   },
+
   methods: {
     restaurantAdd() {
       if (this.fileList.length > 0) {
@@ -129,11 +284,28 @@ export default {
       }
       RestaurantApi("add", this.info)
         .then((res) => {
-          if (res.message == "Restaurant added successfully") {
-            console.log("ok");
+          if (res.result_code === 0) {
+            const rid = res.data.rid;
+            const store = useAppStore();
+            const uid = store.userInfo.user.uid;
+            AuthorizationApi("update", {
+              rid: rid,
+              uid: uid,
+            })
+              .then((res) => {
+                if (res.result_code === 0) {
+                  console.log("Ok");
+                  console.log("Updated")
+                } else {
+                  console.log(res.message);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             this.$router.push({
               name: "Profile",
-              params: { id: res.data._id },
+              query: { rid: res.data.rid },
             });
           } else {
             console.log("Error");
@@ -161,14 +333,18 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  width: 100%;
+  text-align: center;
+}
 .button {
   width: 150px;
-  background-color: black;
+  background-color: rgb(123, 102, 255);
   border-radius: 20px;
 }
 .button:hover {
-  background-color: rgb(210, 210, 210);
-  color: black;
+  background-color: rgb(37, 31, 77);
+  color: white;
   border: 1px solid black;
 }
 </style>

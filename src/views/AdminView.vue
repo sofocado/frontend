@@ -13,7 +13,8 @@
               </router-link></a-button
             >
           </div>
-          <router-view class="content"></router-view>
+         
+          <router-view class="content" style=""></router-view>
         </a-col>
       </a-row>
     </div>
@@ -50,7 +51,7 @@ export default defineComponent({
 
 <style scoped>
 .admin {
-  background-color: rgb(41, 75, 41);
+  background-color: rgb(37, 31, 77);
   min-height: 100vh;
   overflow-y: scroll;
 }
@@ -63,7 +64,7 @@ export default defineComponent({
   background-color: white;
   border-radius: 15px;
   height: 80vh;
-}
+  }
 .Box {
   margin-left: auto;
   margin-right: auto;

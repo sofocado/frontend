@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     onAdd() {
+      console.log(this.info)
       MenuApi("add", this.info, "POST")
         .then((res) => {
           if (res.message === "Menu added successfully") {

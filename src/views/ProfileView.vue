@@ -4,11 +4,14 @@
       <span>{{ userInfo.name }}</span>
       <span>{{ userInfo.description }}</span>
       <span>{{ userInfo.address }}</span>
+      <span>{{ userInfo.workstarttime }}</span>
+      <span>{{ userInfo.workendtime }}</span>
+      <span>{{ userInfo.category }}</span>
       <span>{{ userInfo.countTable }}</span>
-      <img :src="'http://172.20.10.3:1001/' + userInfo.path" alt="" />
+       <img :src="'http://localhost:1001/' + userInfo.path" alt="" />
     </div>
 
-    <a-button type="primary" @click="editProfile()">Edit</a-button>
+    <a-button class="button" @click="editProfile()">Edit</a-button>
   </div>
 </template>
 
@@ -18,7 +21,6 @@ import { RestaurantApi } from "@/api/restaurant";
 export default {
   data() {
     return {
-      dataList: [],
       userInfo: [],
     };
   },
@@ -27,10 +29,9 @@ export default {
   },
   methods: {
     loadData() {
-      // const rid = this.$route.params.rid;
-      RestaurantApi("get", {
-        rid: "f4915f3c-042a-48b0-bf55-5854bfae2ff6",
-      }).then((res) => {
+      const rid = this.$route.query.rid;
+      console.log(rid);
+      RestaurantApi("get", { rid }).then((res) => {
         if (res.result_code === 0) {
           this.userInfo = JSON.parse(JSON.stringify(res.data));
         } else {
@@ -41,8 +42,8 @@ export default {
     editProfile() {
       this.$router.push({
         name: "ProfileUpdate",
-        params: {
-          rid: this.userInfo.rid,
+        query: {
+          rid: this.$route.query.rid
         },
       });
     },
@@ -51,7 +52,16 @@ export default {
 </script>
 
 <style lang="scss">
-
+.button {
+  width: 150px;
+  background-color: rgb(123, 102, 255);
+  border-radius: 20px;
+}
+.button:hover {
+  background-color: rgb(37, 31, 77);
+  color: white;
+  border: 1px solid black;
+}
 
 
 </style>

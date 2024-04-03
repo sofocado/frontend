@@ -57,14 +57,15 @@ const routes = [
         name: "Pre-Order",
         component: () => import("../views/PreOrderView.vue"),
       },
+      {
+        path: "/profile/update",
+        name: "ProfileUpdate",
+        component: () => import("../views/ProfileUpdate.vue"),
+      },
+    
     ],
   },
 
-  {
-    path: "/admin/profile/update/:rid",
-    name: "ProfileUpdate",
-    component: () => import("../views/ProfileUpdate.vue"),
-  },
 
   {
     path: "/admin/list",
