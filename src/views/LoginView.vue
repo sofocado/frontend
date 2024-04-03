@@ -71,15 +71,26 @@ export default {
     onLogin() {
       AuthorizationApi("login", this.info)
         .then((res) => {
-          if (res.result_code === 0 && res) {
+          if (res.result_code === 0 && res.data.user.rid != null) {
+            console.log("Ok");
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
+            localStorage.setItem("rid", res.data.user.rid);
+            this.$router.push({
+              name: "Profile",
+              query: { rid: res.data.user.rid },
+            });
+          } 
+          else if (res.result_code === 0 && res.data.user.rid == null) {
             console.log("Ok");
             localStorage.setItem("userInfo", JSON.stringify(res.data));
             this.$router.push({
-              name: "Admin",
+              name: "Dashboard",
             });
-          } else {
+          } 
+          else {
             console.log(res.message);
           }
+         
         })
         .catch((error) => {
           console.log(error);

@@ -13,7 +13,7 @@
       </router-link>
     </a-menu-item>
     <a-menu-item key="Profile">
-      <router-link :to="{ name: 'Profile' }">
+      <router-link :to="{ name: 'Profile', query: { rid: ww() } }">
         <span>Profile Page</span>
       </router-link>
     </a-menu-item>
@@ -27,11 +27,16 @@
         <span>Pre-Order</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item key="UpdatePage">
-      <router-link :to="{ name: 'UpdatePage' }">
-        <span>UpdatePage</span>
+     <a-menu-item key="Banners">
+      <router-link :to="{ name: 'Banner' }">
+        <span>Banner</span>
       </router-link>
     </a-menu-item>
+    <!-- <a-menu-item key="UpdateProfilePage">
+      <router-link :to="{ name: 'UpdateProfilePage' }">
+        <span>UpdateProfilePage</span>
+      </router-link>
+    </a-menu-item> -->
     <a-menu-item key="Chat">
       <router-link :to="{ name: 'Chat' }">
         <span>Chat</span>
@@ -42,13 +47,12 @@
         <span>MenuUpload</span>
       </router-link>
     </a-menu-item>
-     <a-menu-item key="MenuList">
+    <a-menu-item key="MenuList">
       <router-link :to="{ name: 'MenuList' }">
         <span>Menu</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item disabled>
-    </a-menu-item>
+    <a-menu-item disabled> </a-menu-item>
     <a-menu-item key="Settings">
       <router-link :to="{ name: '' }">
         <span>Settings</span>
@@ -68,6 +72,12 @@
 import { defineComponent, reactive, toRefs } from "vue";
 export default defineComponent({
   components: {},
+  methods: {
+    ww(){
+        const re = localStorage.getItem('rid');
+        return re
+    }
+  },
   setup() {
     const state = reactive({
       selectedKeys: [],
@@ -80,6 +90,7 @@ export default defineComponent({
       ...toRefs(state),
       handleClick,
     };
+  
   },
 });
 </script>

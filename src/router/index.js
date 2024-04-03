@@ -8,15 +8,15 @@ const routes = [
     component: LoginView,
   },
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("../views/DashboardView.vue"),
+  },
+  {
     path: "/admin",
     name: "Admin",
     component: () => import("../views/AdminView.vue"),
     children: [
-      {
-        path: "/dashboard",
-        name: "Dashboard",
-        component: () => import("../views/DashboardView.vue"),
-      },
       {
         path: "/profile",
         name: "Profile",
@@ -34,7 +34,7 @@ const routes = [
       },
       {
         path: "/updateProfile",
-        name: "UpdatePage",
+        name: "UpdateProfilePage",
         component: () => import("../views/UpdateProfileView.vue"),
       },
       {
@@ -58,11 +58,20 @@ const routes = [
         component: () => import("../views/PreOrderView.vue"),
       },
       {
-        path: "/profile/update",
-        name: "ProfileUpdate",
-        component: () => import("../views/ProfileUpdate.vue"),
+        path: "banner",
+        name: "Banner",
+        component: () => import("../views/BannerList.vue"),
       },
-    
+      {
+        path: "bannerAdd",
+        name: "BannerAdd",
+        component: () => import("../views/BannerAdd.vue"),
+      },
+      {
+        path: "categoryAdd",
+        name: "CategoryAdd",
+        component: () => import("../views/CategoryAdd.vue"),
+      },
     ],
   },
 

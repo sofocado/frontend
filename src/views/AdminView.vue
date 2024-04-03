@@ -6,15 +6,12 @@
         <!-- <a-col :span="1"></a-col> -->
         <a-col :span="18" class="Box">
           <div class="header">
-            <!-- <h2>{{ $route.params.phoneNumber }}</h2> -->
+            <h2>{{ name() }}</h2> 
             <a-button type="link" style="color: black">
               <router-link :to="{ name: 'Notifications' }">
-                <BellOutlined style="font-size: 170%" />
-              </router-link></a-button
-            >
+                <BellOutlined style="font-size: 170%" /> </router-link></a-button>
           </div>
-         
-          <router-view class="content" style=""></router-view>
+          <router-view class="content" ></router-view>
         </a-col>
       </a-row>
     </div>
@@ -32,6 +29,11 @@ export default defineComponent({
   components: {
     MenuBox,
     BellOutlined,
+  },
+  methods:{
+     name(){
+      return localStorage.getItem("name");
+     }
   },
   setup() {
     const state = reactive({
@@ -61,10 +63,10 @@ export default defineComponent({
   width: 80vw;
 }
 .Menu {
-  background-color: white;
+  background-color:  rgb(255, 255, 255);
   border-radius: 15px;
   height: 80vh;
-  }
+}
 .Box {
   margin-left: auto;
   margin-right: auto;
@@ -75,8 +77,8 @@ export default defineComponent({
 .header {
   display: flex;
   flex-direction: row;
-  gap: 82%;
-  background-color: white;
+  gap: 35vw;
+  background-color:  rgb(255, 255, 255);
   border: 1px solid #d9d9d9;
   border-radius: 15px;
   width: 100%;
@@ -85,11 +87,12 @@ export default defineComponent({
   padding-left: 4%;
 }
 .content {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   border: 1px solid #d9d9d9;
   border-radius: 15px;
   padding: 4%;
-  height: fit-content;
+  height: 495px;
+  overflow-y: auto; 
   margin-top: 2.5%;
 }
 </style>
