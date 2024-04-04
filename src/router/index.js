@@ -1,11 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
+import HomeView from "../views/HomeView.vue";
+
 
 const routes = [
   {
     path: "/login",
     name: "Login",
     component: LoginView,
+  },
+  {
+    path: "/",
+    name: "Home",
+    component: HomeView,
   },
   {
     path: "/admin",
@@ -33,7 +40,7 @@ const routes = [
         component: () => import("../views/NotifView.vue"),
       },
       {
-        path: "/updateProfile",
+        path: "/update",
         name: "UpdatePage",
         component: () => import("../views/UpdateProfileView.vue"),
       },
@@ -61,7 +68,7 @@ const routes = [
   },
 
   {
-    path: "/admin/profile/update/:rid",
+    path: "/admin/profile/update",
     name: "ProfileUpdate",
     component: () => import("../views/ProfileUpdate.vue"),
   },

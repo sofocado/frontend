@@ -56,7 +56,7 @@
           <a-form-item label="Img">
             <a-upload
               v-model:file-list="fileList"
-              action="http://172.20.10.3:1001/upload/file"
+              action="http://192.168.0.142:1001/upload/file"
               list-type="picture-card"
               @preview="handlePreview"
               name="files"

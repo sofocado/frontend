@@ -1,27 +1,29 @@
 <template>
-  <div>
+  <div class="dashboard">
+    <h2>Update Restaurant</h2>
     <a-form layout="vertical" :model="info">
       <a-row wrap :gutter="[16, 0]">
-        <a-col :xs="24" :sm="16" :lg="6">
+        <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Name">
             <a-input v-model:value="info.name" placeholder="Name" />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
+        <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Description">
             <a-input
               v-model:value="info.description"
-              placeholder="Description"
+              placeholder="Autosize height with minimum and maximum number of lines"
+              :auto-size="{ minRows: 2, maxRows: 5 }"
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
+        <a-col :xs="24" :sm="10" :lg="12">
           <a-form-item label="Address">
             <a-input v-model:value="info.address" placeholder="Name" />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+        <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work Start Time">
             <a-time-picker
               :value="
                 info.workstarttime ? $dayjs(info.workstarttime * 1000) : null
@@ -31,8 +33,8 @@
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Work Time">
+        <a-col :xs="24" :sm="10" :lg="12">
+          <a-form-item label="Work End Time">
             <a-time-picker
               :value="info.workendtime ? $dayjs(info.workendtime * 1000) : null"
               format="HH:mm"
@@ -64,6 +66,7 @@
                 <div style="margin-top: 8px">Upload</div>
               </div>
             </a-upload>
+
             <a-modal
               :visible="previewVisible"
               :title="previewTitle"
@@ -76,9 +79,11 @@
         </a-col>
       </a-row>
     </a-form>
-  </div>
 
-  <a-button type="primary" @click="update()">Send</a-button>
+    <a-button class="button" type="primary" @click="restaurantAdd()"
+      >Send</a-button
+    >
+  </div>
 </template>
 
 <script>
@@ -105,7 +110,7 @@ export default {
       previewTitle: "",
       fileList: [],
       info: {
-        rid: '',
+        rid: "7a38fd24-52e0-42e5-bc27-7a5a244ef1b1",
         name: "",
         description: "",
         address: "",
@@ -116,23 +121,28 @@ export default {
       },
     };
   },
-  mounted() {
-    this.info.rid = this.$route.params.rid;
-  },
   methods: {
-    update() {
+    restaurantAdd() {
       if (this.fileList.length > 0) {
         this.info.path = this.fileList[0].response.files[0].path;
       } else {
-        this.info.path = ""; 
+        this.info.path = "";
       }
-      RestaurantApi("update", this.info).then((res) => {
-        if (res.result_code === 0) {
-          console.log("Success!");
-        } else {
-          console.log("Error");
-        }
-      });
+      RestaurantApi("update", this.info)
+        .then((res) => {
+          if (res.message == "Restaurant added successfully") {
+            console.log("ok");
+            this.$router.push({
+              name: "Profile",
+              params: { id: res.data._id },
+            });
+          } else {
+            console.log("Error");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     handleCancel() {
       this.previewVisible = false;
@@ -151,4 +161,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.button {
+  width: 150px;
+  background-color: black;
+  border-radius: 20px;
+}
+.button:hover {
+  background-color: rgb(210, 210, 210);
+  color: black;
+  border: 1px solid black;
+}
+</style>

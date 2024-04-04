@@ -50,14 +50,14 @@ export default defineComponent({
 
 <style scoped>
 .admin {
-  background-color: rgb(41, 75, 41);
-  min-height: 100vh;
-  overflow-y: scroll;
+  background-color: #f1f1f1;
+  /* min-height: 100vh; */
+  /* overflow-y: scroll; */
 }
 .adminDiv {
-  margin: auto;
-  padding-top: 5%;
-  width: 80vw;
+  /* margin: auto; */
+  /* padding-top: 5%; */
+  /* width: 80vw; */
 }
 .Menu {
   background-color: white;
