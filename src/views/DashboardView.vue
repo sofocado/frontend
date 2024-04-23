@@ -1,7 +1,7 @@
 <template>
   <div class="all">
     <div class="dashboard">
-      <h2>Add Restaurant</h2>
+       <h1 style="color: black; font-size: 200%; text-align: center">Add Restaurant</h1>
       <a-form layout="vertical" :model="info">
         <a-row wrap :gutter="[16, 0]">
           <a-col :xs="24" :sm="16" :lg="12">
@@ -96,23 +96,13 @@
                 style="width: 200px"
                 :filter-option="filterOption"
                 @change="handleChange"
-                ><a-select-option
+                >
+                <a-select-option
                   v-for="option in newArray"
                   :key="option.name"
                   :value="option.name"
                   >{{ option.name }}</a-select-option
                 >
-                <template #dropdownRender="{ menuNode: menu }">
-                  <v-nodes :vnodes="menu" />
-                  <a-divider style="margin: 4px 0" />
-                  <div
-                    style="padding: 4px 8px; cursor: pointer"
-                    @click="addCategory"
-                  >
-                    <plus-outlined />
-                    Add item
-                  </div>
-                </template>
               </a-select>
             </a-form-item>
           </a-col>
@@ -200,7 +190,7 @@
             <a-form-item label="Img">
               <a-upload
                 v-model:file-list="fileList"
-                action="http://localhost:2002/upload/file"
+                action="http://172.20.10.9:2002/upload/file"
                 list-type="picture-card"
                 @preview="handlePreview"
                 name="files"
@@ -256,11 +246,6 @@ const filterOption = (input, option) => {
 export default {
   components: {
     PlusOutlined,
-    VNodes: (_, {
-      attrs,
-    }) => {
-      return attrs.vnodes;
-    },
   },
 
   data() {
@@ -300,17 +285,12 @@ export default {
     categoryList() {
       CategoryApi("list", {}).then((res) => {
         if (res.result_code === 0) {
-          this.newArray = JSON.parse(JSON.stringify(res.data));
+          this.newArray = JSON.parse(JSON.stringify(res.data.rows));
           console.log(this.newArray);
         } else {
           console.log("Error");
         }
       });
-    },
-    addCategory(){
-        this.$router.push({
-              name: "CategoryAdd",
-            });
     },
     restaurantAdd() {
       if (this.fileList.length > 0) {
@@ -341,7 +321,6 @@ export default {
               });
             this.$router.push({
               name: "Profile",
-              query: { rid: res.data.rid },
             });
           } else {
             console.log("Error");
@@ -370,7 +349,7 @@ export default {
 
 <style scoped>
 .all {
-  background-color: rgb(37, 31, 77);
+  background-color:rgb(221, 127, 48);
   padding-left: 25vw;
   padding-right: 25vw;
   padding-top: 5vw;
@@ -389,11 +368,11 @@ h2 {
 }
 .button {
   width: 150px;
-  background-color: rgb(123, 102, 255);
+  background-color:  rgb(221, 127, 48);
   border-radius: 20px;
 }
 .button:hover {
-  background-color: rgb(37, 31, 77);
+  background-color: black;
   color: white;
   border: 1px solid black;
 }

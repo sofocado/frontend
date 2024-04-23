@@ -1,69 +1,75 @@
-<template>
-  <h2>ReStoLike</h2>
+<template >
+<div style="width: 100%">
+    <img class="avo" src="../images/avocado.png" alt="" />
   <a-menu
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
-    style="width: 100%; border-radius: 15px; padding-top: 8%"
+    style="width: 100%; padding-top: 5%;"
     mode="vertical"
     @click="handleClick"
   >
-    <a-menu-item key="Dashboard">
-      <router-link :to="{ name: 'Dashboard' }">
-        <span>Add new restaurant</span>
+   <a-menu-item key="Home" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/home.png" alt="" />
+        <span>Home</span> 
+        </div>
+         <router-link :to="{ name: 'Profile' }">
       </router-link>
     </a-menu-item>
-    <a-menu-item key="Profile">
-      <router-link :to="{ name: 'Profile', query: { rid: ww() } }">
-        <span>Profile Page</span>
+
+    <a-menu-item key="Table" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/tables.png" alt="" />
+        <span>Table</span> 
+        </div>
+         <router-link :to="{ name: 'Tables' }">
       </router-link>
     </a-menu-item>
-    <a-menu-item key="Reservations">
+ 
+    <a-menu-item key="Resevations" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/reserve.png" alt="" />
+        <span style="margin-left: -1em">Reservations</span> 
+        </div>
       <router-link :to="{ name: 'Reservations' }">
-        <span>Reservations</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item key="Pre-Order">
-      <router-link :to="{ name: 'Pre-Order' }">
-        <span>Pre-Order</span>
-      </router-link>
-    </a-menu-item>
-     <a-menu-item key="Banners">
+       <a-menu-item key="Banner" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/banner.png" alt="" />
+        <span>Banner</span> 
+        </div>
       <router-link :to="{ name: 'Banner' }">
-        <span>Banner</span>
       </router-link>
     </a-menu-item>
-    <!-- <a-menu-item key="UpdateProfilePage">
-      <router-link :to="{ name: 'UpdateProfilePage' }">
-        <span>UpdateProfilePage</span>
-      </router-link>
-    </a-menu-item> -->
-    <a-menu-item key="Chat">
-      <router-link :to="{ name: 'Chat' }">
-        <span>Chat</span>
-      </router-link>
-    </a-menu-item>
-    <a-menu-item key="MenuUpload">
-      <router-link :to="{ name: 'MenuUpload' }">
-        <span>MenuUpload</span>
-      </router-link>
-    </a-menu-item>
-    <a-menu-item key="MenuList">
+     <a-menu-item key="Profile" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/menu.png" alt="" />
+        <span>Menu</span> 
+        </div>
       <router-link :to="{ name: 'MenuList' }">
-        <span>Menu</span>
       </router-link>
     </a-menu-item>
-    <a-menu-item disabled> </a-menu-item>
-    <a-menu-item key="Settings">
-      <router-link :to="{ name: '' }">
-        <span>Settings</span>
+      <a-menu-item key="Reviews" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/star.png" alt="" />
+        <span>Reviews</span> 
+        </div>
+      <router-link :to="{ name: 'ReviewsList' }">
       </router-link>
     </a-menu-item>
-    <a-menu-item key="Help & Support">
-      <router-link :to="{ name: '' }">
-        <span>Help & Support</span>
+    <a-menu-item disabled>
+    </a-menu-item>
+      <a-menu-item key="Profile" class="menuitem" style="display: flex; flex-direction: column; height: 4em; text-align: center;"> 
+    <div style="display: flex; flex-direction: column;">
+      <img class="home" src="../images/profile.png" alt="" />
+        <span>Profile</span> 
+        </div>
+      <router-link :to="{ name: 'Profile' }">
       </router-link>
     </a-menu-item>
   </a-menu>
+  </div>
 </template>
 
 
@@ -73,10 +79,6 @@ import { defineComponent, reactive, toRefs } from "vue";
 export default defineComponent({
   components: {},
   methods: {
-    ww(){
-        const re = localStorage.getItem('rid');
-        return re
-    }
   },
   setup() {
     const state = reactive({
@@ -96,8 +98,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
-h2 {
-  margin: 10%;
-  margin-top: 15%;
+
+.avo {
+  width: 3em;
+  height: 3em;
+  margin-left: 25%;
+  margin-top: 30%;
+}
+.home{
+  width: 2em;
+  height: 2em;
+  margin-left: 1em;
 }
 </style>

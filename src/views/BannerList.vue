@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all">
     <a-page-header title="Banner"></a-page-header>
 
     <div>
@@ -8,21 +8,27 @@
           <template v-if="column.key == 'path'">
             <div class="pr">
               <img
-                :src="'http://localhost:2002/' + record.path"
+                :src="'http://172.20.10.9:2002/' + record.path"
                 alt=""
-                class="photo"
+                class="poto"
               />
             </div>
           </template>
           <template v-if="column.type == 'index'">
-            <span>{{ index }}</span>
+            <span>{{ index + 1 }}</span>
+          </template>
+          <template v-if="column.key == 'startTime'">
+            <div>{{ convertSecondsToTime(record.startTime) }}</div>
+          </template>
+          <template v-if="column.key == 'endTime'">
+            <div>{{ convertSecondsToTime(record.endTime) }}</div>
           </template>
           <template v-if="column.key === 'Action'">
             <a-popconfirm
               title="Delete"
               ok-text="Yes"
               cancel-text="No"
-              @confirm="onDelete(record)"
+              @confirm="onDelete(index)"
             >
               <a>Delete</a>
             </a-popconfirm>
@@ -37,6 +43,8 @@
 <script>
 import { BannerApi } from "@/api/banner";
 import { message } from "ant-design-vue";
+import dayjs from "dayjs";
+
 export default {
   data() {
     return {
@@ -53,11 +61,15 @@ export default {
   },
   methods: {
     loadData() {
-      BannerApi("list", {}).then((res) => {
-        if (res.result_code === 0) {
-          this.dataList = JSON.parse(JSON.stringify(res.data));
-        }
-      });
+      const rid = localStorage.getItem("rid")
+      const bannerId = ""
+      BannerApi("get", { rid, bannerId })
+        .then((res) => {
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     handleAdd() {
       this.$router.push({
@@ -74,17 +86,19 @@ export default {
           fixed: "left",
         },
         {
-          title: "Banner ID",
-          key: "bannerId",
-          dataIndex: "bannerId",
-          fixed: "right",
-          width: 100,
-          hidden: true,
-        },
-        {
           title: "Banner",
           dataIndex: "path",
           key: "path",
+        },
+        {
+          title: "Start Time",
+          dataIndex: "startTime",
+          key: "startTime",
+        },
+        {
+          title: "End Time",
+          dataIndex: "endTime",
+          key: "endTime",
         },
         {
           title: "Action",
@@ -92,12 +106,19 @@ export default {
           width: 120,
           align: "center",
         },
-      ].filter((item) => !item.hidden);
+      ]
     },
-    onDelete(record) {
-      var key = record.bannerId;
-      console.log(record);
-      BannerApi("delete", { key }).then((res) => {
+    convertSecondsToTime(seconds) {
+      if (typeof seconds !== "number" || seconds < 0) {
+        return "Invalid input";
+      }
+      const time = dayjs.unix(seconds);
+
+      return time.format("DD.MM.YY HH:mm");
+    },
+    onDelete(index) {
+      var bannerId = this.dataList[index].bannerId;
+      BannerApi("delete", { bannerId }).then((res) => {
         if (res.result_code === 0) {
           message.success("Banner deleted");
           this.loadData();
@@ -109,25 +130,29 @@ export default {
 </script>
 
 <style scoped>
+.all{
+  width: 80vw;
+}
 .button {
-  color: white;
   width: 150px;
-  background-color: rgb(123, 102, 255);
+  background-color: rgb(221, 127, 48);
   border-radius: 20px;
 }
 .button:hover {
-  background-color: rgb(37, 31, 77);
+  background-color: black;
   color: white;
   border: 1px solid black;
 }
 .pr {
-  width: 10vw;
-  height: 20vh;
-  overflow: hidden;
+  width: 20vw;
+  height: 25vh;
 }
-.photo {
+.poto {
   width: 100%;
-  height: auto;
+  height: 25vh;
+  display: block;
+  border-radius: 20px;
+  object-fit: cover;
   display: block;
 }
 </style>

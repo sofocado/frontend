@@ -1,9 +1,42 @@
 <template>
-    <div>
-         <a-form-item label="Img">
+  <div>
+    <a-form layout="vertical" :model="info">
+      <a-row wrap :gutter="[16, 0]">
+        <a-col :xs="24" :sm="16" :lg="12">
+          <a-form-item
+            label="Work Start Time"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-time-picker
+              :value="info.startTime ? $dayjs(info.startTime * 1000) : null"
+              :rules="[{ required: true }]"
+              format="HH:mm"
+              @change="(e) => (info.startTime = $toTimeStamp(e))"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="12">
+          <a-form-item
+            label="Work End Time"
+            :rules="[
+              { required: true, message: 'Please input your phone number!' },
+            ]"
+          >
+            <a-time-picker
+              :value="info.endTime ? $dayjs(info.endTime * 1000) : null"
+              format="HH:mm"
+              :rules="[{ required: true }]"
+              @change="(e) => (info.endTime = $toTimeStamp(e))"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :sm="16" :lg="6">
+          <a-form-item label="Img">
             <a-upload
               v-model:file-list="fileList"
-              action="http://localhost:2002/upload/file"
+              action="http://172.20.10.9:2002/upload/file"
               list-type="picture-card"
               @preview="handlePreview"
               name="files"
@@ -23,14 +56,17 @@
               <img alt="example" style="width: 100%" :src="previewImage" />
             </a-modal>
           </a-form-item>
-           <a-button class="button" type="primary" @click="bannerAdd()"
-      >Send</a-button>
-    </div>
+        </a-col>
+      </a-row>
+    </a-form>
+
+    <a-button class="button" @click="bannerAdd()">Send</a-button>
+  </div>
 </template>
 
 <script>
 import { BannerApi } from "@/api/banner";
-
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -41,7 +77,10 @@ function getBase64(file) {
   });
 }
 
-export default({
+export default {
+  components: {
+    PlusOutlined,
+  },
   data() {
     return {
       previewVisible: false,
@@ -50,14 +89,28 @@ export default({
       fileList: [],
       info: {
         path: "",
+        endTime: "",
+        startTime: "",
+        rid: localStorage.getItem("rid")
       },
     };
   },
 
   methods: {
     bannerAdd() {
-      if (this.fileList.length > 0) {
+      if (
+        this.fileList.length > 0 &&
+        this.fileList[0].response &&
+        this.fileList[0].response.files &&
+        this.fileList[0].response.files.length > 0
+      ) {
         this.info.path = this.fileList[0].response.files[0].path;
+      } else if (
+        this.fileList.length > 0 &&
+        this.fileList[0].url &&
+        this.fileList[0].url.substring(0, 22) == "http://172.20.10.9:2002/"
+      ) {
+        this.info.path = this.fileList[0].url.substring(22);
       } else {
         this.info.path = "";
       }
@@ -65,7 +118,7 @@ export default({
         .then((res) => {
           if (res.result_code === 0) {
             this.$router.push({
-               name: "Banner"
+              name: "Banner",
             });
           } else {
             console.log("Error");
@@ -89,6 +142,19 @@ export default({
         file.name || file.url.substring(file.url.lastIndexOf("/") + 1);
     },
   },
-
-})
+};
 </script>
+
+
+<style scoped>
+.button {
+  width: 150px;
+  background-color: rgb(221, 127, 48);
+  border-radius: 20px;
+}
+.button:hover {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}
+</style>

@@ -1,98 +1,68 @@
 <template>
-  <div class="admin">
-    <div class="adminDiv">
-      <a-row>
-        <a-col :span="5" class="Menu"><MenuBox /></a-col>
-        <!-- <a-col :span="1"></a-col> -->
-        <a-col :span="18" class="Box">
-          <div class="header">
-            <h2>{{ name() }}</h2> 
-            <a-button type="link" style="color: black">
-              <router-link :to="{ name: 'Notifications' }">
-                <BellOutlined style="font-size: 170%" /> </router-link></a-button>
-          </div>
-          <router-view class="content" ></router-view>
-        </a-col>
-      </a-row>
+    <div class="home">
+        <a-layout :style="{ height: 100 + '%' }">
+            <a-layout-sider width="130" :style="{ overflowY: 'auto' }" :trigger="null" >
+                <new-menu-box></new-menu-box>
+                <!-- <div class="bt-h"></div> -->
+            </a-layout-sider>
+            <a-layout class="layout-content">
+                <a-layout-content class="router-area">
+                    <router-view></router-view>
+                </a-layout-content>
+            </a-layout>
+        </a-layout>
     </div>
-  </div>
 </template>
 
-
-
 <script>
-import { defineComponent, reactive, toRefs } from "vue";
-import MenuBox from "@/components/MenuBox.vue";
-import { BellOutlined } from "@ant-design/icons-vue";
+import NewMenuBox from "@/components/NewMenuBox.vue"
 
-export default defineComponent({
-  components: {
-    MenuBox,
-    BellOutlined,
-  },
-  methods:{
-     name(){
-      return localStorage.getItem("name");
-     }
-  },
-  setup() {
-    const state = reactive({
-      selectedKeys: [],
-      openKeys: [],
-    });
-    const handleClick = (menuInfo) => {
-      console.log("click ", menuInfo);
-    };
-    return {
-      ...toRefs(state),
-      handleClick,
-    };
-  },
-});
+export default {
+    components: {
+        NewMenuBox,
+    },
+    data() {
+        return {
+            
+        }
+    },
+    computed: {
+        langTag() {
+            return this.$i18n.locale
+        },
+    },
+    methods: {
+        setLanguage(e) {
+            this.$i18n.locale = e
+            localStorage.setItem("currentLang", e)
+        },
+        // -- end --
+    },
+}
 </script>
+<style lang="scss" scoped>
+.home {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    
+    .layout-content {
+        overflow-y: hidden;
+    }
 
-<style scoped>
-.admin {
-  background-color: rgb(37, 31, 77);
-  min-height: 100vh;
-  overflow-y: scroll;
-}
-.adminDiv {
-  margin: auto;
-  padding-top: 5%;
-  width: 80vw;
-}
-.Menu {
-  background-color:  rgb(255, 255, 255);
-  border-radius: 15px;
-  height: 80vh;
-}
-.Box {
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 15px;
-  align-items: stretch;
-  height: 80vh;
-}
-.header {
-  display: flex;
-  flex-direction: row;
-  gap: 35vw;
-  background-color:  rgb(255, 255, 255);
-  border: 1px solid #d9d9d9;
-  border-radius: 15px;
-  width: 100%;
-  padding-bottom: 2%;
-  padding-top: 2.8%;
-  padding-left: 4%;
-}
-.content {
-  background-color: rgb(255, 255, 255);
-  border: 1px solid #d9d9d9;
-  border-radius: 15px;
-  padding: 4%;
-  height: 495px;
-  overflow-y: auto; 
-  margin-top: 2.5%;
+    .router-area {
+        overflow-y: auto;
+        padding-left: 4em;
+        padding-top: 5em;
+        background: #f2f2f2;
+        min-height: 280px;
+        box-sizing: border-box;
+    }
 }
 </style>
