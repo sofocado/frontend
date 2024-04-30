@@ -1,5 +1,6 @@
 <template>
   <div>
+    <a-page-header title="Add Banner"></a-page-header>
     <a-form layout="vertical" :model="info">
       <a-row wrap :gutter="[16, 0]">
         <a-col :xs="24" :sm="16" :lg="12">
@@ -36,7 +37,7 @@
           <a-form-item label="Img">
             <a-upload
               v-model:file-list="fileList"
-              action="http://172.20.10.9:2002/upload/file"
+              :action="baseURL"
               list-type="picture-card"
               @preview="handlePreview"
               name="files"
@@ -67,6 +68,7 @@
 <script>
 import { BannerApi } from "@/api/banner";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import config from "@/config/index.js";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -83,6 +85,7 @@ export default {
   },
   data() {
     return {
+      baseURL: config.baseURL + "/upload/file",
       previewVisible: false,
       previewImage: "",
       previewTitle: "",

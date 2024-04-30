@@ -40,7 +40,6 @@ export default {
     },
   },
   mounted() {
-    console.log("------menu------");
     this.setMenuList();
   },
   methods: {
@@ -79,12 +78,6 @@ export default {
           routerName: "Reservations",
           icon: require("../images/reserve.png"),
           expand: true,
-        },
-        {
-          name: "Banner",
-          routerName: "Banner",
-          icon: require("../images/banner.png"),
-          expand: true,
         }, 
         {
           name: "Menu",
@@ -92,6 +85,19 @@ export default {
           icon: require("../images/menu.png"),
           expand: true,
         },
+         {
+          name: "Order",
+          routerName: "Order",
+          icon: require("../images/order.png"),
+          expand: true,
+        },
+        {
+          name: "Banner",
+          routerName: "Banner",
+          icon: require("../images/banner.png"),
+          expand: true,
+        }, 
+       
         {
           name: "Reviews",
           routerName: "ReviewsList",
@@ -121,7 +127,7 @@ export default {
     background-color: #fff;
 
     .logo {
-      padding: 50px 10px;
+      padding: 30px 10px;
       display: flex;
       justify-content: center;
       align-items: center;

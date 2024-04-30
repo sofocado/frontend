@@ -190,7 +190,7 @@
             <a-form-item label="Img">
               <a-upload
                 v-model:file-list="fileList"
-                action="http://172.20.10.9:2002/upload/file"
+                :action="baseURL2"
                 list-type="picture-card"
                 @preview="handlePreview"
                 name="files"
@@ -224,6 +224,7 @@
 import { RestaurantApi } from "@/api/restaurant";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { CategoryApi } from "@/api/category";
+import config from "@/config/index.js";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -234,7 +235,7 @@ function getBase64(file) {
   });
 }
 const handleChange = (value) => {
-  console.log(`selected ${value}`);
+  console.log(value);
 };
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -246,6 +247,8 @@ export default {
   },
   data() {
     return {
+      baseURL: config.baseURL+ "/",
+      baseURL2: config.baseURL + "/upload/file",
       newArray: [
         {
           cid: "",
@@ -266,7 +269,7 @@ export default {
         workendtime: 0,
         category: "",
         countTable: 0,
-        path: "",
+        path: [],
         phone: "",
         avgCheque: 0,
         parking: 0,
@@ -283,14 +286,14 @@ export default {
       const rid = localStorage.getItem("rid");
       RestaurantApi("get", { rid }).then((res) => {
         if (res.result_code === 0) {
-          this.userInfo = JSON.parse(JSON.stringify(res.data));
-          this.info = this.userInfo;
-          this.fileList = [
-            {
-              url: "http://172.20.10.9:2002/" + this.info.path,
-            },
-          ];
-          console.log(this.fileList);
+          this.info = JSON.parse(JSON.stringify(res.data));
+          for(var it in this.info.path){
+            this.fileList.push({
+               url: this.baseURL + this.info.path[it],
+            })
+          }
+          console.log(this.fileList)
+
         } else {
           console.log("Error");
         }
@@ -299,7 +302,7 @@ export default {
     categoryList() {
       CategoryApi("list", {}).then((res) => {
         if (res.result_code === 0) {
-          this.newArray = JSON.parse(JSON.stringify(res.data));
+          this.newArray = JSON.parse(JSON.stringify(res.data.rows));
         } else {
           console.log("Error");
         }
@@ -313,23 +316,21 @@ export default {
         this.fileList[0].response.files &&
         this.fileList[0].response.files.length > 0
       ) {
-        this.info.path = this.fileList[0].response.files[0].path;
-      } 
-      else if (
+         for(var item in this.fileList){
+          this.info.path.push(this.fileList[item].response.files[0].path);
+        }
+      } else if (
         this.fileList.length > 0 &&
         this.fileList[0].url &&
-        this.fileList[0].url.substring(0, 24) == "http://172.20.10.9:2002/"
+        this.fileList[0].url.substring(0, this.fileList[0].url.lastIndexOf("/") + 1) == this.baseURL 
       ) {
-        this.info.path = this.fileList[0].url.substring(24);
-      } 
-      else {
-        this.info.path = "";
+         for(var i in this.fileList){
+          this.info.path.push("uploads/" + this.fileList[i].url.substring(this.fileList[i].url.lastIndexOf("/") + 1, this.fileList[i].url.length ));
+        }
       }
-
       RestaurantApi("update", this.info).then((res) => {
-        console.log(this.fileList);
         if (res.result_code === 0) {
-          console.log("Success!");
+          this.fileList = []
           this.$router.push({
             name: "Profile",
           });

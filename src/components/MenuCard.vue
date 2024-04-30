@@ -1,45 +1,82 @@
 <template>
-<div class="over">
-  <div class="all">
-    <a-card hoverable class="card">
-      <div>
-        <img :src="'http://172.20.10.9:2002/' + image" alt="" class="photo" />
-      </div>
-      <div class="name">
-         {{ name }}
-      </div>
-      <div class="desc">
-         {{ description }}
-      </div>
+  <div class="over">
+    <div class="all">
+      <a-modal
+        v-model:visible="modalVisible"
+        title="Edit"
+        style="
+          height: fit-content;
+          border-radius: 10px;
+          width: 35em;
+        "
+        :footer="null"
+      >
+        <div>
+          <MenuEdit
+          @exit="close"
+            :name="name"
+            :menuId="menuId"
+            :ingredient="ingredient"
+            :category="category"
+            :path="path"
+            :price="price"
+          />
+        </div>
+    
+      </a-modal>
 
-      <div class="price">
-        <h2>{{ price }} TG</h2>
-      </div>
-    </a-card>
-  </div>
+      <a-card hoverable class="card" @click="deleteMenu()">
+        <div>
+          <img :src="path" alt="" class="photo" />
+        </div>
+        <div class="name">
+          {{ name }}
+        </div>
+        <div class="desc">
+          {{ ingredient }}
+        </div>
+
+        <div class="price">
+          <h2>{{ price }} TG</h2>
+        </div>
+      </a-card>
+    </div>
   </div>
 </template>
 
 <script>
+import MenuEdit from "@/components/MenuEdit.vue";
 
 export default {
-    data() {
+  components: {
+    MenuEdit,
+  },
+  data() {
     return {
       modalVisible: false,
     };
   },
   props: {
     name: String,
-    description: String,
-    image: String,
+    ingredient: String,
+    path: String,
+    category: String,
+    menuId: String,
     price: Number,
   },
   methods: {
     handleCancel() {
-      this.modalVisible = false
+      this.modalVisible = false;
+    },
+    close(){
+      this.modalVisible = false;
+      this.$emit('load', true)
+    },
+    deleteMenu() {
+      this.modalVisible = true;
     },
   },
-  }
+};
 </script>
 
 <style scoped>
@@ -50,7 +87,7 @@ export default {
   margin-bottom: 20%;
 }
 .name {
-  width: 10em;
+  width: 10.5em;
   height: 2em;
   position: relative;
   top: -4em;
@@ -67,7 +104,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
-  width: 10em;
+  width: 11em;
 }
 .price {
   height: 20%;
@@ -80,7 +117,7 @@ export default {
   width: 70%;
   position: relative;
   bottom: 0.5em;
-  background-color: rgb(255, 222, 195);
+  background-color: rgb(221, 127, 48);
 }
 .card {
   align-content: center;
@@ -99,7 +136,7 @@ export default {
   top: -6.5em;
   display: block;
 }
-.over{
+.over {
   height: fit-content;
 }
 </style>

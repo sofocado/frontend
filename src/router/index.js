@@ -26,13 +26,6 @@ const routes = [
         path: "/reservations",
         name: "Reservations",
         component: () => import("../views/ReservationsView.vue"),
-        children: [
-          {
-            path: "/preorder",
-            name: "Pre-Order",
-            component: () => import("../views/PreOrderView.vue"),
-          },
-        ]
       },
       {
         path: "/notifications",
@@ -80,10 +73,16 @@ const routes = [
         component: () => import("../views/MenuUploadView.vue"),
       },
       {
+        path: "/orders",
+        name: "Order",
+        component: () => import("../views/OrderView.vue"),
+      },
+      {
         path: "/reviews",
         name: "ReviewsList",
         component: () => import("../views/ReviewsList.vue"),
       },
+     
     ],
   },
 ];

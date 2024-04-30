@@ -102,7 +102,7 @@ export default {
       const rid = localStorage.getItem("rid");
       TableApi("list", { rid }).then((res) => {
         if (res.result_code === 0) {
-          this.dataList = JSON.parse(JSON.stringify(res.data));
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         }
       });
     },

@@ -36,7 +36,6 @@ export default {
             this.$i18n.locale = e
             localStorage.setItem("currentLang", e)
         },
-        // -- end --
     },
 }
 </script>

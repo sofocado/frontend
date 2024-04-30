@@ -190,7 +190,7 @@
             <a-form-item label="Img">
               <a-upload
                 v-model:file-list="fileList"
-                action="http://172.20.10.9:2002/upload/file"
+                :action="baseURL2"
                 list-type="picture-card"
                 @preview="handlePreview"
                 name="files"
@@ -227,6 +227,8 @@ import { AuthorizationApi } from "@/api/auth";
 import { CategoryApi } from "@/api/category";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { useAppStore } from "@/store/index.js";
+import config from "@/config/index.js";
+
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -236,8 +238,8 @@ function getBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
+const handleChange = () => {
+  console.log();
 };
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -250,6 +252,8 @@ export default {
 
   data() {
     return {
+      baseURL: config.baseURL+ "/",
+      baseURL2: config.baseURL + "/upload/file",
       previewVisible: false,
       previewImage: "",
       previewTitle: "",
@@ -286,7 +290,6 @@ export default {
       CategoryApi("list", {}).then((res) => {
         if (res.result_code === 0) {
           this.newArray = JSON.parse(JSON.stringify(res.data.rows));
-          console.log(this.newArray);
         } else {
           console.log("Error");
         }
@@ -294,7 +297,9 @@ export default {
     },
     restaurantAdd() {
       if (this.fileList.length > 0) {
-        this.info.path = this.fileList[0].response.files[0].path;
+        // for(var item in this.fileList){
+          this.info.path = (this.fileList[0].response.files[0].path);
+        // }
       } else {
         this.info.path = "";
       }

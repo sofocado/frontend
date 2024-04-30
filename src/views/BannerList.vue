@@ -1,41 +1,32 @@
 <template>
   <div class="all">
     <a-page-header title="Banner"></a-page-header>
-
-    <div>
-      <a-table :columns="columns" :data-source="dataList" :pagination="false">
-        <template #bodyCell="{ column, index, record }">
-          <template v-if="column.key == 'path'">
-            <div class="pr">
-              <img
-                :src="'http://172.20.10.9:2002/' + record.path"
-                alt=""
-                class="poto"
-              />
-            </div>
-          </template>
-          <template v-if="column.type == 'index'">
-            <span>{{ index + 1 }}</span>
-          </template>
-          <template v-if="column.key == 'startTime'">
-            <div>{{ convertSecondsToTime(record.startTime) }}</div>
-          </template>
-          <template v-if="column.key == 'endTime'">
-            <div>{{ convertSecondsToTime(record.endTime) }}</div>
-          </template>
-          <template v-if="column.key === 'Action'">
-            <a-popconfirm
+    <div v-if="info.path == ''" :key="info.name">
+       <h1>You don't have a banner! Click this button to add a new banner</h1>
+        <a-button class="button" @click="handleAdd">Add</a-button>
+    </div>
+  
+    <div v-if="info.path != ''" :key="info.name">
+      <a-card hoverable style="width: 300px">
+        <template #cover>
+          <img
+            :alt="baseURL + info.path"
+            :src="baseURL + info.path"
+          />
+        </template>
+        <template #actions>
+          <a-popconfirm
               title="Delete"
               ok-text="Yes"
               cancel-text="No"
-              @confirm="onDelete(index)"
+              @confirm="onDelete()"
             >
               <a>Delete</a>
             </a-popconfirm>
-          </template>
         </template>
-      </a-table>
-      <a-button class="button" @click="handleAdd">Add</a-button>
+        <a-card-meta  :description="convertSecondsToTime(info.startTime) + '-'+ convertSecondsToTime(info.endTime) ">
+        </a-card-meta>
+      </a-card>
     </div>
   </div>
 </template>
@@ -44,28 +35,31 @@
 import { BannerApi } from "@/api/banner";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
+import config from "@/config/index.js";
+
 
 export default {
   data() {
     return {
-      dataList: [],
-      columns: [],
-      bannerId: null,
+      info: {
+        bannerId: "",
+        path: "",
+        startTime: 0,
+        endTime: 0
+      },
+      baseURL: config.baseURL+"/"
     };
-  },
-  created() {
-    this.setColumns();
   },
   mounted() {
     this.loadData();
   },
   methods: {
     loadData() {
-      const rid = localStorage.getItem("rid")
-      const bannerId = ""
+      const rid = localStorage.getItem("rid");
+      const bannerId = "";
       BannerApi("get", { rid, bannerId })
         .then((res) => {
-          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
+          this.info = JSON.parse(JSON.stringify(res.data));
         })
         .catch((error) => {
           console.log(error);
@@ -76,38 +70,6 @@ export default {
         name: "BannerAdd",
       });
     },
-    setColumns() {
-      this.columns = [
-        {
-          title: "#",
-          type: "index",
-          width: "55px",
-          align: "center",
-          fixed: "left",
-        },
-        {
-          title: "Banner",
-          dataIndex: "path",
-          key: "path",
-        },
-        {
-          title: "Start Time",
-          dataIndex: "startTime",
-          key: "startTime",
-        },
-        {
-          title: "End Time",
-          dataIndex: "endTime",
-          key: "endTime",
-        },
-        {
-          title: "Action",
-          key: "Action",
-          width: 120,
-          align: "center",
-        },
-      ]
-    },
     convertSecondsToTime(seconds) {
       if (typeof seconds !== "number" || seconds < 0) {
         return "Invalid input";
@@ -116,8 +78,8 @@ export default {
 
       return time.format("DD.MM.YY HH:mm");
     },
-    onDelete(index) {
-      var bannerId = this.dataList[index].bannerId;
+    onDelete() {
+      var bannerId = this.info.bannerId;
       BannerApi("delete", { bannerId }).then((res) => {
         if (res.result_code === 0) {
           message.success("Banner deleted");
@@ -130,10 +92,11 @@ export default {
 </script>
 
 <style scoped>
-.all{
+.all {
   width: 80vw;
 }
 .button {
+  margin-top: 2em;
   width: 150px;
   background-color: rgb(221, 127, 48);
   border-radius: 20px;

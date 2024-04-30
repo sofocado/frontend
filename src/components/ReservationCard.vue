@@ -21,7 +21,6 @@
       </h1>
       </div>
     <div>
-      <button class="button" @click="view">View</button>
     </div>
   </div>
 </template>
@@ -35,6 +34,7 @@ export default {
     Username: String,
     reservationStartTime: Number,
     table: String,
+    orderId: String,
     message: String,
     occasion: String,
     reservationCode: String
@@ -48,11 +48,6 @@ export default {
 
       return time.format("DD.MM.YY HH:mm");
     },
-    view(){
-         this.$router.push({
-              name: "Pre-Order",
-            });
-    }
   },
 };
 </script>
@@ -64,23 +59,8 @@ export default {
   padding: 2em;
   border: 1px solid rgb(221, 127, 48);
   border-radius: 20px;
-  margin-bottom: 2em;
   padding-bottom: 0px;
   padding-top: 15px;
-}
-.button {
-  width: 5em;
-  background-color: rgb(221, 127, 48);
-  border-radius: 10px;
-  border: 1px solid black;
-  height: 2em;
-  color: white;
-  position: relative;
-  margin-bottom: 3vh;
-}
-.button:hover {
-  background-color: black;
-  color: white;
 }
 </style>
 

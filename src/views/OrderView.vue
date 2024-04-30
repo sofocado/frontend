@@ -1,9 +1,22 @@
 <template>
     <div class="all">
-        <h2 style="color: black; font-size: 20px">Order # </h2>
+        <h2 style="color: black; font-size: 20px">Order # {{orderId}}</h2>
     </div>
 </template>
 
+
+<script>
+
+export default {
+data() {
+    return {
+      orderId: this.$route.query.orderId
+    };
+  },
+}
+
+
+</script>
 
 <style scoped>
 .all{

@@ -4,18 +4,62 @@
     <div class="all">
       <div class="inner">
         <div class="info1">
-          <div class="photo-back">
-            <img
-              :src="'http://172.20.10.9:2002/' + userInfo.path"
-              alt=""
-              class="photo"
-            />
+          <a-modal
+            v-model:visible="modalVisible"
+            title="Photos"
+            style="height: fit-content; border-radius: 10px; width: 40em"
+            :footer="null"
+          >
+            <a-carousel arrows>
+              <template #prevArrow>
+                <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
+                  <left-circle-outlined />
+                </div>
+              </template>
+              <template #nextArrow>
+                <div class="custom-slick-arrow" style="right: 10px">
+                  <right-circle-outlined />
+                </div>
+              </template>
+              <div v-for="item in userInfo.path" :key="item">
+                <div class="photo-back1">
+                  <img
+                    :src="baseURL + item"
+                    alt=""
+                    class="photo1"
+                    @click="handlePreview"
+                  />
+                </div>
+              </div>
+            </a-carousel>
+          </a-modal>
+
+          <div v-for="(item, index) in userInfo.path" :key="item">
+            <div v-if="index == 0" :key="item">
+              <div class="photo-back">
+                <img
+                  :src="baseURL + userInfo.path"
+                  alt=""
+                  class="photo"
+                  @click="handlePreview"
+                />
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row">
+              <div v-if="index >= 1" :key="item">
+                <div class="photo-back2">
+                  <img
+                    :src="baseURL + item"
+                    alt=""
+                    class="photo2"
+                    @click="handlePreview"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
+
           <h1 class="name">{{ userInfo.name }}</h1>
-          <!-- <a-button class="button2" @click="login"
-            ><img src="../images/logout.png" alt="" class="login_photo" /> Log
-            in & Password</a-button
-          > -->
           <a-button class="button2" @click="logout"
             ><img src="../images/login.png" alt="" class="login_photo" /> Log
             out</a-button
@@ -76,10 +120,14 @@
 import { RestaurantApi } from "@/api/restaurant";
 import { AuthorizationApi } from "@/api/auth";
 import dayjs from "dayjs";
+import config from "@/config/index.js";
 
 export default {
   data() {
     return {
+      modalVisible: false,
+      baseURL: config.baseURL + "/",
+      baseURL2: config.baseURL + "/upload/file",
       userInfo: [],
     };
   },
@@ -129,6 +177,9 @@ export default {
         name: "UpdateProfilePage",
       });
     },
+    handlePreview() {
+      this.modalVisible = true;
+    },
   },
 };
 </script>
@@ -168,11 +219,38 @@ export default {
 .photo-back {
   margin-top: 10%;
   margin-left: 10%;
-  width: 12vw;
-  height: 24vh;
+  width: 12em;
+  object-fit: cover;
+  height: 12em;
   overflow: hidden;
 }
 .photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.photo-back1 {
+  width: 100%;
+  object-fit: cover;
+  height: 30em;
+  overflow: hidden;
+}
+.photo1 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-back2 {
+  margin-top: 10%;
+  margin-left: 10%;
+  width: 5em;
+  height: 5em;
+  overflow: hidden;
+}
+.photo2 {
   width: 100%;
   height: 100%;
   display: block;
@@ -270,5 +348,35 @@ export default {
   background-color: rgb(221, 127, 48);
   color: white;
   border: 1px solid rgb(221, 127, 48);
+}
+
+:deep(.slick-slide) {
+  text-align: center;
+  height: fit-content;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+:deep(.slick-arrow.custom-slick-arrow) {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
+  color: #fff;
+  background-color: rgba(31, 45, 61, 0.11);
+  transition: ease all 0.3s;
+  opacity: 0.3;
+  z-index: 1;
+}
+:deep(.slick-arrow.custom-slick-arrow:before) {
+  display: none;
+}
+:deep(.slick-arrow.custom-slick-arrow:hover) {
+  color: #fff;
+  opacity: 0.5;
+}
+
+:deep(.slick-slide h3) {
+  color: #fff;
 }
 </style>

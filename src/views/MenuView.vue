@@ -1,13 +1,25 @@
 <template>
-  <div>
-    <!-- <a-input-search
+  <div style="margin-top: -2em">
+    <a-page-header title="Menu"></a-page-header>
+    <a-input-search
       class="search"
       v-model:value="value"
       enter-button
       size="large"
-      @search="onSearch"
+      @search="onSearch(value)"
     />
-    <a-page-header title="Menu"></a-page-header> -->
+    <div class="categ">
+      <div>
+        <button class="button2" style="width: 3em" @click="loadData">All</button>
+      </div>
+
+      <div v-for="item in newArray" :key="item.name">
+        <button class="button2" @click="catSort(item.name)">
+          {{ item.name }}
+        </button>
+      </div>
+    </div>
+
     <div class="grid">
       <a-row
         justify="start"
@@ -17,11 +29,12 @@
         <a-col v-for="item in dataList" :key="item.name" :span="6" :offset="1">
           <MenuCard
             :name="item.name"
-            :item-id="item.menuId"
-            :description="item.ingredient"
-            :image="item.path"
+            :menuId="item.menuId"
+            :ingredient="item.ingredient"
+            :category="item.category"
+            :path="baseURL + item.path"
             :price="item.price"
-            @click="deleteMenu"
+            @load="loadData"
           />
         </a-col>
       </a-row>
@@ -58,7 +71,7 @@
                 </a-col>
                 <a-col :xs="24" :sm="10" :lg="12">
                   <a-form-item
-                    label="Ingradients"
+                    label="Ingredients"
                     :rules="[
                       { required: true, message: 'Please input ingredients!' },
                     ]"
@@ -83,7 +96,6 @@
                       placeholder="Select a Category"
                       style="width: 200px"
                       :filter-option="filterOption"
-                      @change="handleChange"
                       @click="categoryList()"
                     >
                       <a-select-option
@@ -125,7 +137,7 @@
                   <a-form-item label="Img">
                     <a-upload
                       v-model:file-list="fileList"
-                      action="http://172.20.10.9:2002/upload/file"
+                      :action="baseURL2"
                       list-type="picture-card"
                       @preview="handlePreview"
                       name="files"
@@ -152,15 +164,6 @@
                 </a-col>
               </a-row>
             </a-form>
-            <a-modal
-              v-model:visible="modalVisible"
-              @cancel="handleCancel"
-              @ok="deleteMen"
-              title="Delete Menu"
-            >
-              <!-- Modal content goes here -->
-              <p>Do you want to delete menu?</p>
-            </a-modal>
             <a-button class="button" type="primary" @click="menuAdd()"
               >Send</a-button
             >
@@ -176,6 +179,7 @@ import { MenuApi } from "@/api/menu";
 import MenuCard from "@/components/MenuCard.vue";
 import { MenuCatApi } from "@/api/menuCat";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import config from "@/config/index.js";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -185,9 +189,7 @@ function getBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
@@ -202,6 +204,8 @@ export default {
   },
   data() {
     return {
+      baseURL: config.baseURL+ "/",
+      baseURL2: config.baseURL + "/upload/file",
       modalVisible: false,
       dataList: [],
       columns: [],
@@ -209,8 +213,8 @@ export default {
       previewImage: "",
       previewTitle: "",
       fileList: [],
-      handleChange,
       filterOption,
+      menuId: 0,
       newArray: [
         {
           mcid: "",
@@ -229,6 +233,7 @@ export default {
   },
   mounted() {
     this.loadData();
+    this.categoryList();
   },
   methods: {
     categoryList() {
@@ -253,6 +258,28 @@ export default {
         }
       });
     },
+    onSearch(value) {
+      const filter = {
+        keyWord: value,
+      };
+      const rid = localStorage.getItem("rid");
+      MenuApi("list", { rid, filter }).then((res) => {
+        if (res.result_code === 0) {
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
+        }
+      });
+    },
+    catSort(value){
+      const filter = {
+        categoryName: value,
+      };
+      const rid = localStorage.getItem("rid");
+      MenuApi("list", { rid, filter }).then((res) => {
+        if (res.result_code === 0) {
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
+        }
+      });
+    },
     menuAdd() {
       if (
         this.fileList.length > 0 &&
@@ -264,9 +291,9 @@ export default {
       } else if (
         this.fileList.length > 0 &&
         this.fileList[0].url &&
-        this.fileList[0].url.substring(0, 22) == "http://172.20.10.9:2002/"
+        this.fileList[0].url.substring(this.fileList[0].url.lastIndexOf("/") + 1) == this.baseURL 
       ) {
-        this.info.path = this.fileList[0].url.substring(22);
+        this.info.path = this.fileList[0].url.substring(this.fileList[0].url.lastIndexOf("/") + 1);
       } else {
         this.info.path = "";
       }
@@ -288,17 +315,6 @@ export default {
           console.log(error);
         });
     },
-    deleteMenu() {
-      this.modalVisible = true;
-    },
-    deleteMen() {
-      var menuId = "";
-      MenuApi("delete", { menuId }).then((res) => {
-        if (res.result_code === 0) {
-          this.loadData();
-        }
-      });
-    },
     handleCancel() {
       this.previewVisible = false;
       this.previewTitle = "";
@@ -318,18 +334,43 @@ export default {
 
 <style scoped>
 .button {
-  margin-left: 6vw;
+  height: 5vh;
+  margin-left: 0.5vw;
+  margin-bottom: 1vw;
   width: 150px;
+  border: 1px solid rgb(221, 127, 48);
   background-color: rgb(221, 127, 48);
   border-radius: 20px;
 }
 .button:hover {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(221, 127, 48);
   color: white;
-  border: 1px solid black;
+}
+.button2 {
+  height: 5vh;
+  margin-left: 0.5vw;
+  margin-bottom: 1vw;
+  width: 150px;
+  border: 1px solid rgb(221, 127, 48);
+  background-color: white;
+  border-radius: 20px;
+}
+.button2:hover {
+  background-color: rgb(221, 127, 48);
+  color: white;
+}
+.categ {
+  margin-left: 2vw;
+  display: flex;
+  flex-direction: row;
+  width: 60.5%;
+  overflow-y: auto;
+}
+.categ::-webkit-scrollbar {
+  display: none;
 }
 .photo {
-  width: 100%;
+  width: 20em;
   height: auto;
   display: block;
 }
@@ -342,7 +383,7 @@ export default {
   height: fit-content;
   border-radius: 20px;
   border: 1px solid rgb(221, 127, 48);
-  right: 5em;
+  right: 6em;
   position: fixed;
   width: 25vw;
   background-color: white;
@@ -359,6 +400,8 @@ export default {
 }
 .search {
   margin-left: 2vw;
-  width: 45vw;
+  width: 60%;
+  margin-bottom: 1em;
+
 }
 </style>
