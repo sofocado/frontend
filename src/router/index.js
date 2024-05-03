@@ -28,11 +28,6 @@ const routes = [
         component: () => import("../views/ReservationsView.vue"),
       },
       {
-        path: "/notifications",
-        name: "Notifications",
-        component: () => import("../views/NotifView.vue"),
-      },
-      {
         path: "/updateProfile",
         name: "UpdateProfilePage",
         component: () => import("../views/UpdateProfileView.vue"),
@@ -66,11 +61,6 @@ const routes = [
         path: "/menuCatAdd",
         name: "MenuCatAdd",
         component: () => import("../views/MenuCatAdd.vue"),
-      },
-      {
-        path: "/menuUploadView",
-        name: "MenuUpload",
-        component: () => import("../views/MenuUploadView.vue"),
       },
       {
         path: "/orders",

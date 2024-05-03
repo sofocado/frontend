@@ -38,7 +38,7 @@
             <div v-if="index == 0" :key="item">
               <div class="photo-back">
                 <img
-                  :src="baseURL + userInfo.path"
+                  :src="baseURL + item"
                   alt=""
                   class="photo"
                   @click="handlePreview"
@@ -218,7 +218,7 @@ export default {
 }
 .photo-back {
   margin-top: 10%;
-  margin-left: 10%;
+  margin-left: 8%;
   width: 12em;
   object-fit: cover;
   height: 12em;
@@ -229,7 +229,7 @@ export default {
   height: 100%;
   display: block;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 20px;
 }
 .photo-back1 {
   width: 100%;
@@ -245,16 +245,16 @@ export default {
 }
 .photo-back2 {
   margin-top: 10%;
-  margin-left: 10%;
-  width: 5em;
-  height: 5em;
+  margin-left: 40%;
+  width: 3em;
+  height: 3em;
   overflow: hidden;
 }
 .photo2 {
   width: 100%;
   height: 100%;
   display: block;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .texts {
   padding: 3%;

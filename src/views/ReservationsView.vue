@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <a-date-picker v-model:value="value2" :format="dateFormatList" @click="filter()"/> -->
-    <a-page-header title="Reservations"></a-page-header>
+    <a-page-header style="width: 50%" title="Reservations"></a-page-header>
+     <a-date-picker  class="date" v-model:value="sort" />
     <a-row>
       <a-col :span="16" class="Cards">
         <div v-for="(item, index) in dataList" :key="item.name">
@@ -32,7 +32,9 @@ import { ReservationApi } from "@/api/reservation";
 import ReservationCard from "@/components/ReservationCard.vue";
 import OrderCard from "@/components/OrderCard.vue";
 
+
 export default {
+  
   components: {
     ReservationCard,
     OrderCard,
@@ -42,7 +44,8 @@ export default {
       dataList: [],
       orderId: "",
       order: false,
-      reservationStartTime: 0
+      reservationStartTime: 0,
+      sort: ""
     };
   },
   mounted() {
@@ -52,7 +55,8 @@ export default {
     loadData() {
       const uid = "";
       const rid = localStorage.getItem("rid");
-      ReservationApi("list", { uid, rid })
+      const sort = this.sort
+      ReservationApi("list", { uid, rid, sort })
         .then((res) => {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         })
@@ -60,18 +64,19 @@ export default {
           console.log(error);
         });
     },
-    view(orderId, reservationStartTime) {
+    async view(orderId, reservationStartTime) {
           this.order = true;
           this.orderId = orderId;
           this.reservationStartTime = reservationStartTime   
     },
+    
   },
 };
 </script>
 
 <style scoped>
 .Box {
-  top: -10vh;
+  top: -17vh;
   right: 7.5em;
 }
 .button {
@@ -88,5 +93,8 @@ export default {
 .button:hover {
   background-color: black;
   color: white;
+}
+.date{
+  margin-bottom: 3vh;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="all">
     <a-page-header title="Reviews"></a-page-header>
-     <div class="buttona">{{ pp(avgRate) }} <img src="../images/star2.png" style="width: 1.5em; heigth: auto; margin-top: -3px" alt=""></div>
+     <div class="buttona">{{ pp(avgRate) }} <img src="../images/star2.png" style="width: 1.5em; heigth: auto; margin-top: -3px;" alt=""></div>
     <div>
       <a-table :columns="columns" :data-source="dataList" :pagination="true" class="table">
         <template #bodyCell="{ column, index, record }">
@@ -119,6 +119,7 @@ export default {
 .buttona {
   padding-top: 7px;
   margin-bottom: 1em;
+  margin-left: 1.5em;
   text-align: center;
   width: 5em;
   height: 2em;

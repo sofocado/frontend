@@ -4,17 +4,16 @@
     <a-input-search
       class="search"
       v-model:value="value"
-      enter-button
       size="large"
       @search="onSearch(value)"
     />
     <div class="categ">
       <div>
-        <button class="button2" style="width: 3em" @click="loadData">All</button>
+        <button class="button2" style="width: 3em" @click="loadData"  :class="{ 'selected': activeCategory === null }">All</button>
       </div>
 
       <div v-for="item in newArray" :key="item.name">
-        <button class="button2" @click="catSort(item.name)">
+        <button class="button2" @click="catSort(item.name)" :class="{ 'selected': activeCategory === item.name }">
           {{ item.name }}
         </button>
       </div>
@@ -208,13 +207,13 @@ export default {
       baseURL2: config.baseURL + "/upload/file",
       modalVisible: false,
       dataList: [],
-      columns: [],
       previewVisible: false,
       previewImage: "",
       previewTitle: "",
       fileList: [],
       filterOption,
       menuId: 0,
+      activeCategory: null,
       newArray: [
         {
           mcid: "",
@@ -270,6 +269,7 @@ export default {
       });
     },
     catSort(value){
+      this.activeCategory = value;
       const filter = {
         categoryName: value,
       };
@@ -359,11 +359,15 @@ export default {
   background-color: rgb(221, 127, 48);
   color: white;
 }
+.button2.selected {
+  background-color: rgb(221, 127, 48);
+  color: white;
+}
 .categ {
   margin-left: 2vw;
   display: flex;
   flex-direction: row;
-  width: 60.5%;
+  width: 60%;
   overflow-y: auto;
 }
 .categ::-webkit-scrollbar {

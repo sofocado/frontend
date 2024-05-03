@@ -58,11 +58,18 @@ props:{
     orderId: String,
     reservationStartTime: Number,
 },
-mounted() {
-    this.loadData();
-},
+ watch: {
+    orderId: {
+      immediate: true, 
+      handler(newOrderId) {
+        if (newOrderId) {
+          this.loadData();
+        }
+      },
+    },
+  },
 methods:{
-    loadData(){
+    async loadData(){
       const orderId = this.orderId
       const uid = "";
       const rid = localStorage.getItem("rid");

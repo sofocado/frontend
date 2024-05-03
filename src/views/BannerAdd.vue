@@ -3,38 +3,34 @@
     <a-page-header title="Add Banner"></a-page-header>
     <a-form layout="vertical" :model="info">
       <a-row wrap :gutter="[16, 0]">
-        <a-col :xs="24" :sm="16" :lg="12">
-          <a-form-item
-            label="Work Start Time"
-            :rules="[
-              { required: true, message: 'Please input your phone number!' },
-            ]"
-          >
-            <a-time-picker
+        <a-col :xs="24" :sm="16" :lg="5">
+          <a-label> Select start date and time:</a-label>
+          <a-form-item>
+            <a-date-picker
               :value="info.startTime ? $dayjs(info.startTime * 1000) : null"
               :rules="[{ required: true }]"
-              format="HH:mm"
+              show-time
+              format="DD.MM.YYYY HH:mm"
               @change="(e) => (info.startTime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
-        <a-col :xs="24" :sm="16" :lg="12">
-          <a-form-item
-            label="Work End Time"
-            :rules="[
-              { required: true, message: 'Please input your phone number!' },
-            ]"
-          >
-            <a-time-picker
+
+        <a-col :xs="24" :sm="16" :lg="19">
+          <a-label> Select end date and time:</a-label>
+          <a-form-item>
+            <a-date-picker
               :value="info.endTime ? $dayjs(info.endTime * 1000) : null"
-              format="HH:mm"
+              format="DD.MM.YYYY HH:mm"
+              show-time
               :rules="[{ required: true }]"
               @change="(e) => (info.endTime = $toTimeStamp(e))"
             />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :sm="16" :lg="6">
-          <a-form-item label="Img">
+           <a-label> Upload a banner: </a-label>
+          <a-form-item>
             <a-upload
               v-model:file-list="fileList"
               :action="baseURL"
@@ -92,9 +88,9 @@ export default {
       fileList: [],
       info: {
         path: "",
-        endTime: "",
-        startTime: "",
-        rid: localStorage.getItem("rid")
+        endTime: 0,
+        startTime: 0,
+        rid: localStorage.getItem("rid"),
       },
     };
   },
@@ -111,9 +107,13 @@ export default {
       } else if (
         this.fileList.length > 0 &&
         this.fileList[0].url &&
-        this.fileList[0].url.substring(0, 22) == "http://172.20.10.9:2002/"
+        this.fileList[0].url.substring(
+          this.fileList[0].url.lastIndexOf("/") + 1
+        ) == this.baseURL
       ) {
-        this.info.path = this.fileList[0].url.substring(22);
+        this.info.path = this.fileList[0].url.substring(
+          this.fileList[0].url.lastIndexOf("/") + 1
+        );
       } else {
         this.info.path = "";
       }

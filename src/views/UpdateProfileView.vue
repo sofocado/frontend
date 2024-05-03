@@ -316,7 +316,7 @@ export default {
         this.fileList[0].response.files &&
         this.fileList[0].response.files.length > 0
       ) {
-         for(var item in this.fileList){
+         for(var item = 0; item < Math.min(3, this.fileList.length); item++) {
           this.info.path.push(this.fileList[item].response.files[0].path);
         }
       } else if (

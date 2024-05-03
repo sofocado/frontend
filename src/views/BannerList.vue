@@ -81,9 +81,9 @@ export default {
     onDelete() {
       var bannerId = this.info.bannerId;
       BannerApi("delete", { bannerId }).then((res) => {
-        if (res.result_code === 0) {
-          message.success("Banner deleted");
+        if (res.result_code == 0) {
           this.loadData();
+          message.success("Banner deleted");
         }
       });
     },

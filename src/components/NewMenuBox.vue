@@ -153,7 +153,7 @@ export default {
         justify-content: center;
         gap: 8px;
         padding: 10px;
-        width: 60%;
+        width: 70%;
 
         &:hover {
           // background-color: #f4f4f4;
