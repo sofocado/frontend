@@ -107,7 +107,7 @@ export default {
         {
           name: "Profile",
           routerName: "Profile",
-          icon: require("../images/profile.png"),
+          icon: require("../images/profile2.png"),
           expand: true,
         },
       ];
@@ -127,7 +127,7 @@ export default {
     background-color: #fff;
 
     .logo {
-      padding: 30px 10px;
+      padding: 22px 5px;
       display: flex;
       justify-content: center;
       align-items: center;

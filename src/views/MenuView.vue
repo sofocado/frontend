@@ -23,7 +23,7 @@
       <a-row
         justify="start"
         class="row-wrapper"
-        style="display: flex; flex-wrap: wrap"
+        style="display: flex; flex-wrap: wrap; margin-top: 30px"
       >
         <a-col v-for="item in dataList" :key="item.name" :span="6" :offset="1">
           <MenuCard
@@ -68,21 +68,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col :xs="24" :sm="10" :lg="12">
-                  <a-form-item
-                    label="Ingredients"
-                    :rules="[
-                      { required: true, message: 'Please input ingredients!' },
-                    ]"
-                  >
-                    <a-input
-                      v-model:value="info.ingredient"
-                      placeholder="ingredient"
-                      :rules="[{ required: true }]"
-                    />
-                  </a-form-item>
-                </a-col>
-                <a-col :xs="24" :sm="20" :lg="20">
+                <a-col :xs="24" :sm="20" :lg="12">
                   <a-form-item
                     label="Category"
                     :rules="[
@@ -93,7 +79,7 @@
                       v-model:value="info.category"
                       show-search
                       placeholder="Select a Category"
-                      style="width: 200px"
+                      style="width: 150px"
                       :filter-option="filterOption"
                       @click="categoryList()"
                     >
@@ -115,6 +101,20 @@
                         </div>
                       </template>
                     </a-select>
+                  </a-form-item>
+                </a-col>
+                 <a-col :xs="24" :sm="10" :lg="20">
+                  <a-form-item
+                    label="Ingredients"
+                    :rules="[
+                      { required: true, message: 'Please input ingredients!' },
+                    ]"
+                  >
+                    <a-textarea
+                      v-model:value="info.ingredient"
+                      placeholder="Description"
+                      :rules="[{ required: true }]"
+                    />
                   </a-form-item>
                 </a-col>
                 <a-col :xs="24" :sm="16" :lg="6">

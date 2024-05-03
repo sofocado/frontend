@@ -88,13 +88,11 @@ export default {
 }
 .name {
   width: 10.5em;
-  height: 2em;
+  height: 1em;
   position: relative;
-  top: -4em;
+  top: -5em;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: wrap;
   font-size: 16px;
 }
 .desc {
@@ -113,10 +111,9 @@ export default {
   padding-top: 2%;
   border-radius: 30px 30px 0 0;
   border: 1px solid rgb(200, 200, 200);
-  margin-bottom: -6.1em;
+  margin-bottom: -4.9em;
   width: 70%;
   position: relative;
-  bottom: 0.5em;
   background-color: rgb(221, 127, 48);
 }
 .card {
@@ -130,7 +127,7 @@ export default {
   width: 100%;
   border: 1px solid rgb(221, 127, 48);
   border-radius: 30px;
-  height: 100px;
+  height: 17vh;
   object-fit: cover;
   position: relative;
   top: -6.5em;
