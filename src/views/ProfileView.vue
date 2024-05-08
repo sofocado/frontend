@@ -21,7 +21,7 @@
                   <right-circle-outlined />
                 </div>
               </template>
-              <div v-for="item in userInfo.path" :key="item">
+              <div v-for="item in reversedPath" :key="item">
                 <div class="photo-back1">
                   <img
                     :src="baseURL + item"
@@ -34,7 +34,7 @@
             </a-carousel>
           </a-modal>
 
-          <div v-for="(item, index) in userInfo.path" :key="item">
+          <div v-for="(item, index) in reversedPath" :key="item">
             <div v-if="index == 0" :key="item">
               <div class="photo-back">
                 <img
@@ -128,11 +128,18 @@ export default {
       modalVisible: false,
       baseURL: config.baseURL + "/",
       baseURL2: config.baseURL + "/upload/file",
-      userInfo: [],
+      userInfo: {
+        path: []
+      },
     };
   },
   mounted() {
     this.loadData();
+  },
+  computed: {
+    reversedPath() {
+      return this.userInfo.path.slice().reverse();
+    }
   },
   methods: {
     loadData() {

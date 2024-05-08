@@ -3,7 +3,7 @@
     <div v-if="orderId != null && orderId != ''" :key="0">
         <div style="padding-left: 2.5vw; padding-right: 2.5vw; padding-top: 2.5vw;">
             <h2 style="color: black; font-size: 20px">Order #{{orderId}}</h2>
-            <h2 style="color: rgb(221, 127, 48); font-size: 18px">{{convertSecondsToTime(reservationStartTime)}}</h2>
+            <h2 style="color: rgb(221, 127, 48); font-size: 18px">{{$timeFormat(dataList.createTime, 1)}}</h2>
        </div>
        <div style="padding-left: 2.5vw; padding-right: 2.5vw; height: 40vh; width: 100%; overflow-y: scroll;">
         <div v-for="(item, index) in dataList.menu" :key="item.name" class="outer">
@@ -56,7 +56,6 @@ data() {
   },
 props:{
     orderId: String,
-    reservationStartTime: Number,
 },
  watch: {
     orderId: {
@@ -82,13 +81,14 @@ methods:{
           console.log(error);
         });
     },
-     convertSecondsToTime(seconds) {
+    convertSecondsToTime(seconds) {
       if (typeof seconds !== "number" || seconds < 0) {
         return "Invalid input";
       }
       const time = dayjs.unix(seconds);
-      return time.format("YYYY-MM-DD HH:mm");
+      return time.format("DD.MM.YYYY HH:MM");
     },
+
     length(){
         return this.length2
     },

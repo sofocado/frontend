@@ -195,7 +195,7 @@
                 @preview="handlePreview"
                 name="files"
               >
-                <div v-if="fileList.length < 8">
+                <div v-if="fileList.length < 3">
                   <plus-outlined />
                   <div style="margin-top: 8px">Upload</div>
                 </div>
@@ -274,7 +274,7 @@ export default {
         workendtime: 0,
         category: "",
         countTable: 0,
-        path: "",
+        path: [],
         phone: "",
         avgCheque: 0,
         parking: 0,
@@ -297,9 +297,9 @@ export default {
     },
     restaurantAdd() {
       if (this.fileList.length > 0) {
-        // for(var item in this.fileList){
-          this.info.path = (this.fileList[0].response.files[0].path);
-        // }
+         for(var item in this.fileList){
+          this.info.path.push(this.fileList[item].response.files[0].path);
+         }
       } else {
         this.info.path = "";
       }

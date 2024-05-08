@@ -9,9 +9,9 @@
               <h2 style="color: black; font-size: 20px; margin-bottom: 0">
                 Order # {{ item.orderId }}
               </h2>
-              <div>{{ convertSecondsToDate(item.createTime) }}</div>
-              <div style="font-size: 16px">
-                {{ convertSecondsToTime(item.createTime) }}
+              <div>{{ $timeFormat(item.createTime, 1) }}</div>
+              <div style="font-size: 18px; color: rgb(221, 127, 48)">
+                {{ $timeFormat(item.createTime, 1) }}
               </div>
             </div>
             <button class="button" @click="view(item.orderId, item.createTime)">
@@ -64,7 +64,7 @@ export default {
       const rid = localStorage.getItem("rid");
       OrderApi("list", { uid, rid })
         .then((res) => {
-          this.dataList = JSON.parse(JSON.stringify(res.data));
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         })
         .catch((error) => {
           console.log(error);
@@ -75,7 +75,7 @@ export default {
         return "Invalid input";
       }
       const time = dayjs.unix(seconds);
-      return time.format("YYYY-MM-DD");
+      return time.format("DD.MM.YYYY");
     },
 
     convertSecondsToTime(seconds) {
@@ -114,8 +114,8 @@ export default {
   height: 2em;
   color: white;
   position: relative;
-  top: -14vh;
-  left: 38vw;
+  top: -3em;
+  left: 80%;
 }
 .button:hover {
   background-color: black;

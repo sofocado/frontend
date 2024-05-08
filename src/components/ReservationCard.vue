@@ -17,7 +17,7 @@
       </h2>
 
       <h1 style="font-size: 20px; margin-top: 1em">
-        {{ convertSecondsToTime(reservationStartTime) }}
+        {{ $timeFormat(reservationStartTime, 1) }}
       </h1>
       </div>
     <div>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
 
 export default {
   props: {
@@ -40,14 +39,6 @@ export default {
     reservationCode: String
   },
   methods: {
-    convertSecondsToTime(seconds) {
-      if (typeof seconds !== "number" || seconds < 0) {
-        return "Invalid input";
-      }
-      const time = dayjs.unix(seconds);
-
-      return time.format("DD.MM.YY HH:mm");
-    },
   },
 };
 </script>

@@ -100,7 +100,7 @@ export default {
 
 <style scoped>
 .all{
-    width: 80em;
+    width: 95%;
     margin-top: 2em;
     padding-top: 2em;
     background-color: white;
@@ -108,7 +108,7 @@ export default {
 }
 .table{
     border-radius: 20px;
-
+    width: 100%;
 }
 .button {
   width: 100px;

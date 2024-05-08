@@ -5,7 +5,7 @@
         <a-col :span="12" class="col1">
           <a-form layout="vertical" :model="info" class="form2">
             <a-form-item>
-             <img class="log_im" src="../images/logo.png" alt="" />
+             <img class="log_im" src="../images/logo_or.png" alt="" />
               <h3>Please Log in to your account</h3>
             </a-form-item>
             <a-form-item
@@ -149,7 +149,7 @@ export default {
 }
 .log_im {
   width: 60%;
-  height: 3em;
+  height: auto;
   border-radius: 20px;
   margin-bottom: 4%;
 }

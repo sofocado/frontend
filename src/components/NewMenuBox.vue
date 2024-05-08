@@ -127,7 +127,7 @@ export default {
     background-color: #fff;
 
     .logo {
-      padding: 22px 5px;
+      padding: 20px 5px;
       display: flex;
       justify-content: center;
       align-items: center;

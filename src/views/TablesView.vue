@@ -5,7 +5,7 @@
       <a-modal
         v-model:visible="modalVisible"
         title="Edit"
-        style="height: 60vh; border-radius: 10px; width: 35em"
+        style="height: 60vh; border-radius: 10px; width: 60em"
         :footer="null"
       >
         <div>
@@ -21,11 +21,18 @@
                 <span>{{ index + 1 }}</span>
               </template>
               <template v-if="column.type == 'action'">
-                <a-button danger @click="deleteTable(record.tableId)">Delete</a-button>
+                <a-button danger @click="deleteTable(record.tableId)"
+                  >Delete</a-button
+                >
+              </template>
+              <template v-if="column.type == 'qrcode'">
+                <div>
+                  <qrcode-vue :value="qrValue+'&tableId='+record.tableId+'&rid='+info.rid" :size="80"  ></qrcode-vue>
+                </div>
               </template>
             </template>
           </a-table>
-           <a-button danger @click="deleteTabl(tid)">Delete All</a-button>
+          <a-button danger @click="deleteTabl(tid)">Delete All</a-button>
         </div>
       </a-modal>
       <div class="card">
@@ -145,8 +152,12 @@
 <script>
 import { TableApi } from "@/api/table";
 import { message } from "ant-design-vue";
+import QrcodeVue from 'qrcode.vue';
 
 export default {
+  components: {
+    QrcodeVue
+  },
   data() {
     return {
       modalVisible: false,
@@ -158,6 +169,7 @@ export default {
         tableCount: 0,
         rid: localStorage.getItem("rid"),
       },
+       qrValue: 'https://localhost:2002/' 
     };
   },
   mounted() {
@@ -169,8 +181,8 @@ export default {
       TableApi("add", this.info)
         .then((res) => {
           if (res.result_code === 0) {
-            this.info.type = 0
-            this.info.tableCount = 0
+            this.info.type = 0;
+            this.info.tableCount = 0;
             this.loadData();
           } else {
             console.log("Error");
@@ -199,7 +211,7 @@ export default {
         }
       });
     },
-     deleteTabl(value) {
+    deleteTabl(value) {
       const tid = value;
       const tableId = "";
       TableApi("delete", { tableId, tid }).then((res) => {
@@ -224,6 +236,13 @@ export default {
           dataIndex: "tableId",
           key: "tableId",
         },
+          {
+          title: "QR Code",
+          dataIndex: "qrcode",
+          key: "qrcode",
+          type: "qrcode",
+          width: "70px",
+        },
         {
           title: "Action",
           dataIndex: "action",
@@ -231,12 +250,13 @@ export default {
           type: "action",
           width: "70px",
         },
-      ]
+
+      ];
     },
     tablesList(value) {
       this.modalVisible = true;
-      this.data = value.tables
-      this.tid = value.tid
+      this.data = value.tables;
+      this.tid = value.tid;
     },
     handleCancel() {
       this.modalVisible = false;
