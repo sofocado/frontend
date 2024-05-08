@@ -8,6 +8,8 @@ if (localeUinfo) {
 export const useAppStore = defineStore("app", {
   state: () => ({
     userInfo: localeUinfo || {},
+    isLoading: false,
+    isBigWin: true,
   }),
   getters: {
     hasLogin: (state) => {

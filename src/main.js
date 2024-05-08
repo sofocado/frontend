@@ -3,16 +3,17 @@ import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
 import dayjs from "dayjs";
-
+import i18n from "./locales/index.js";
+import { useAppStore } from "./store/index";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 import config from "@/config/index.js";
 
 const pinia = createPinia();
 const app = createApp(App);
-app.use(router).use(Antd).use(pinia);
+app.use(i18n).use(router).use(Antd).use(pinia);
 app.mount("#app");
-
+app.config.globalProperties.$store = useAppStore();
 app.config.globalProperties.$dateFormat = "DD/MM/YYYY";
 app.config.globalProperties.$timeFormat = timeFormat;
 app.config.globalProperties.$getHourMinute = getHourMinute;
