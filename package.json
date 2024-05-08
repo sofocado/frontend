@@ -13,8 +13,11 @@
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
     "core-js": "^3.8.3",
+    "css.gg": "^2.1.1",
+    "date": "^2.0.5",
     "dayjs": "^1.11.10",
     "pinia": "^2.1.7",
+    "qrcode.vue": "^3.4.1",
     "sass": "^1.71.0",
     "sass-loader": "^14.1.1",
     "vue": "^3.2.13",
@@ -33,7 +36,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "vue/setup-compiler-macros": true
     },
     "extends": [
       "plugin:vue/vue3-essential",

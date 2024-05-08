@@ -1,16 +1,12 @@
 import http from "../utils/http";
 
-export function AuthorizationApi(url, data, method) {
+export function OrderApi(url, data, method) {
   let info = {
-    url: "auth/" + url,
+    url: "order/" + url,
   };
   if (method == "GET") {
     info["method"] = "GET";
-  } 
-  else if (method == "DELETE") {
-    info["method"] = "DELETE";
-  }
-  else {
+  } else {
     info["method"] = "POST";
     info["data"] = data;
   }

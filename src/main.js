@@ -29,7 +29,7 @@ function timeFormat(t, hm) {
   if (typeof t != "number") {
     return t;
   }
-  let d = new Date(t);
+  let d = new Date(t * 1000);
   let day = d.getDate();
   let m = d.getMonth() + 1;
   let y = d.getFullYear();
