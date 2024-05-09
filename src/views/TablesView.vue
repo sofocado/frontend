@@ -27,7 +27,7 @@
               </template>
               <template v-if="column.type == 'qrcode'">
                 <div>
-                  <qrcode-vue :value="qrValue+'&tableId='+record.tableId+'&rid='+info.rid" :size="80"  ></qrcode-vue>
+                  <qrcode-vue :value="qrValue+'qr&tableId='+record.tableId+'&rid='+info.rid" :size="80"  ></qrcode-vue>
                 </div>
               </template>
             </template>
