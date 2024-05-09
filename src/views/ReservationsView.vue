@@ -9,74 +9,77 @@
         <button class="button2" @click="loadData2">History</button>
       </div>
     </div>
+    <a-date-picker
+      class="date"
+      v-model:value="selectedDate"
+      placeholder="Select Date"
+      style="margin-bottom: 1em"
+      @change="onDateChange"
+    />
 
     <a-row>
-      <template v-if="dat">
+      <template v-if="dat" >
         <a-col :span="16" class="Cards">
-        <div v-for="(item, index) in filteredData" :key="item.name">
-          <ReservationCard
-            :index="index + 1"
-            :Username="item.name"
-            :reservationStartTime="item.reservationStartTime"
-            :table="item.tableType"
-            :message="item.message"
-            :orderId="item.orderId"
-            :occasion="item.occasion"
-            :reservationCode="item.reservationCode"
-          />
-          <div class="button-container">
-            <button
-              class="button"
-              @click="view(item.orderId, item.reservationStartTime)"
-            >
-              View
-            </button>
-            <button class="buttona" @click="deleteRes(item.reservationId)">
-              Delete
-            </button>
+          <div v-for="(item, index) in filteredData" :key="item.name">
+               <ReservationCard
+              :index="index + 1"
+              :Username="item.name"
+              :reservationStartTime="item.reservationStartTime"
+              :table="item.tableType"
+              :message="item.message"
+              :orderId="item.orderId"
+              :occasion="item.occasion"
+              :reservationCode="item.reservationCode"
+            />
+            <div class="button-container">
+              <button
+                class="button"
+                @click="view(item.orderId, item.reservationStartTime)"
+              >
+                View
+              </button>
+              <button class="buttona" @click="deleteRes(item.reservationId)">
+                Delete
+              </button>
+            </div>
+           
           </div>
-        </div>
-      </a-col>
+        </a-col>
       </template>
-     <template v-else>
+      <template v-else>
         <a-col :span="16" class="Cards">
-        <div v-for="(item, index) in filteredData2" :key="item.name">
-          <ReservationCard
-            :index="index + 1"
-            :Username="item.name"
-            :reservationStartTime="item.reservationStartTime"
-            :table="item.tableType"
-            :message="item.message"
-            :orderId="item.orderId"
-            :occasion="item.occasion"
-            :reservationCode="item.reservationCode"
-          />
-          <div class="button-container">
-            <button
-              class="button"
-              @click="view(item.orderId, item.reservationStartTime)"
-            >
-              View
-            </button>
-            <button class="buttona" @click="deleteRes(item.reservationId)">
-              Delete
-            </button>
+          <div v-for="(item, index) in filteredData2" :key="item.name">
+            <ReservationCard
+              :index="index + 1"
+              :Username="item.name"
+              :reservationStartTime="item.reservationStartTime"
+              :table="item.tableType"
+              :message="item.message"
+              :orderId="item.orderId"
+              :occasion="item.occasion"
+              :reservationCode="item.reservationCode"
+            />
+            <div class="button-container">
+              <button
+                class="button"
+                @click="view(item.orderId, item.reservationStartTime)"
+              >
+                View
+              </button>
+              <button class="buttona" @click="deleteRes(item.reservationId)">
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
-      </a-col>
+        </a-col>
       </template>
-     
+
       <a-col :span="8" class="Box">
         <div v-if="order" :key="order">
-          <OrderCard
-            :orderId="orderId"
-          />
+          <OrderCard :orderId="orderId" />
         </div>
       </a-col>
     </a-row>
-
-   <a-pagination v-model:current="current" :total="dataList.recordcount" show-less-items />
-
   </div>
 </template>
 
@@ -101,8 +104,9 @@ export default {
       dat: true,
       activeCategory: false,
       currentPage: 1,
-      pageSize: 10, 
+      pageSize: 10,
       totalRecords: 0,
+      selectedDate: null,
     };
   },
   mounted() {
@@ -115,7 +119,7 @@ export default {
         (item) => item.reservationStartTime >= currentTime
       );
     },
-     filteredData2() {
+    filteredData2() {
       const currentTime = new Date().getTime() / 1000.0; // Get current time in milliseconds
       return this.dataList.filter(
         (item) => item.reservationStartTime <= currentTime
@@ -158,11 +162,14 @@ export default {
           console.log(error);
         });
     },
-
     async view(orderId, reservationStartTime) {
       this.order = true;
       this.orderId = orderId;
       this.reservationStartTime = reservationStartTime;
+    },
+    onDateChange(date) {
+      console.log("Selected Date:", date);
+      this.selectedDate = date
     },
   },
 };
@@ -171,6 +178,7 @@ export default {
 <style lang="scss" scoped>
 .Cards {
   position: relative;
+  padding-left: 0.5em;
 }
 .Box {
   top: -17vh;
@@ -241,30 +249,4 @@ export default {
   background-color: rgb(221, 127, 48);
   color: white;
 }
-
-.pagination {
-  display: flex;
-  justify-content: start;
-  margin-top: 1rem;
-}
-
-.page-button {
-  margin: 0 0.5rem;
-  padding: 0.5rem 0.2rem;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
-  color: #333;
-  cursor: pointer;
-  border-radius: 0.25rem;
-}
-
-.page-button:hover {
-  background-color: #e9e9e9;
-}
-
-.page-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 </style>

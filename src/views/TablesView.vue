@@ -232,9 +232,9 @@ export default {
           fixed: "left",
         },
         {
-          title: "Table Id",
-          dataIndex: "tableId",
-          key: "tableId",
+          title: "Table Code",
+          dataIndex: "tableCode",
+          key: "tableCode",
         },
           {
           title: "QR Code",

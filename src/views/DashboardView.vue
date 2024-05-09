@@ -171,7 +171,7 @@
           </a-col>
           <a-col :xs="24" :sm="20" :lg="20">
             <a-form-item
-              label="Praying"
+              label="Praying Room"
               :rules="[
                 {
                   required: true,

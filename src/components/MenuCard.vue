@@ -111,7 +111,7 @@ export default {
   padding-top: 2%;
   border-radius: 30px 30px 0 0;
   border: 1px solid rgb(200, 200, 200);
-  margin-bottom: -4.9em;
+  margin-bottom: -3.9em;
   width: 70%;
   position: relative;
   background-color: rgb(221, 127, 48);
@@ -127,7 +127,7 @@ export default {
   width: 100%;
   border: 1px solid rgb(221, 127, 48);
   border-radius: 30px;
-  height: 17vh;
+  height: 9em;
   object-fit: cover;
   position: relative;
   top: -6.5em;

@@ -9,7 +9,7 @@
             <span>{{ index + 1 }}</span>
           </template>
           <template v-if="column.key == 'createTime'">
-            <div>{{ convertSecondsToTime(record.createTime) }}</div>
+            <div>{{ $timeFormat(record.createTime, 1) }}</div>
           </template>
          
         </template>
@@ -20,7 +20,6 @@
 
 <script>
 import { ReviewApi } from "@/api/review";
-import dayjs from "dayjs";
 
 export default {
   data() {
@@ -85,14 +84,6 @@ export default {
         },
        
       ]
-    },
-      convertSecondsToTime(seconds) {
-      if (typeof seconds !== "number" || seconds < 0) {
-        return "Invalid input";
-      }
-      const time = dayjs.unix(seconds);
-
-      return time.format("DD.MM.YY HH:mm");
     },
   },
 };
