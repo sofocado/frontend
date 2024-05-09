@@ -3,7 +3,7 @@
     <div v-if="orderId != null && orderId != ''" :key="0">
         <div style="padding-left: 2.5vw; padding-right: 2.5vw; padding-top: 2.5vw;">
             <h2 style="color: black; font-size: 20px">Order #{{orderId}}</h2>
-            <h2 style="color: rgb(221, 127, 48); font-size: 18px">{{$timeFormat(dataList.createTime, 1)}}</h2>
+            <h2 style="color: rgb(221, 127, 48); font-size: 18px">{{$timeFormat(dataList.createTime, 0)}}</h2>
        </div>
        <div style="padding-left: 2.5vw; padding-right: 2.5vw; height: 40vh; width: 100%; overflow-y: scroll;">
         <div v-for="(item, index) in dataList.menu" :key="item.name" class="outer">
@@ -15,7 +15,7 @@
 
                  <div class="flex-container">
                    <div>{{item.price}} tg x {{ dataList.quantity[index] }}</div>
-                   <div>{{ calc(item.price, dataList.quantity[index]) }}</div>
+                   <div>{{ calc(item.price, dataList.quantity[index]) }} TG</div>
                  </div>
                  </div>
             </div>
@@ -23,11 +23,9 @@
         </div>
         </div>
          <div class="inner2">
-          <h1>Items({{ length() }}): </h1>
-          <h1>Tax:</h1>
+          <h1>Items: {{ length() }}</h1>
           <hr style="color:  rgb(221, 127, 48);">
-          <h2 style="display: flex; justify-content: space-between; font-size: 20px;">Total: <div style="font-size: 20px;"> {{ dataList.total }} </div>  </h2>
-          <h2>Payment Method: </h2>
+          <h2 style="display: flex; justify-content: space-between; font-size: 20px;">Total: <div style="font-size: 20px;"> {{ dataList.total }} TG </div>  </h2>
         </div>
      </div>
     <div v-else>
@@ -43,7 +41,6 @@
 <script>
 import { OrderApi } from "@/api/order";
 import config from "@/config/index.js";
-import dayjs from "dayjs";
 
 export default {
 data() {
@@ -80,13 +77,6 @@ methods:{
         .catch((error) => {
           console.log(error);
         });
-    },
-    convertSecondsToTime(seconds) {
-      if (typeof seconds !== "number" || seconds < 0) {
-        return "Invalid input";
-      }
-      const time = dayjs.unix(seconds);
-      return time.format("DD.MM.YYYY HH:MM");
     },
 
     length(){

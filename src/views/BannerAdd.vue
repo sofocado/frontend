@@ -97,7 +97,7 @@ export default {
 
   methods: {
     bannerAdd() {
-      if (
+        if (
         this.fileList.length > 0 &&
         this.fileList[0].response &&
         this.fileList[0].response.files &&
@@ -107,13 +107,9 @@ export default {
       } else if (
         this.fileList.length > 0 &&
         this.fileList[0].url &&
-        this.fileList[0].url.substring(
-          this.fileList[0].url.lastIndexOf("/") + 1
-        ) == this.baseURL
+        this.fileList[0].url.substring(this.fileList[0].url.lastIndexOf("/") + 1) == this.baseURL 
       ) {
-        this.info.path = this.fileList[0].url.substring(
-          this.fileList[0].url.lastIndexOf("/") + 1
-        );
+        this.info.path = this.fileList[0].url.substring(this.fileList[0].url.lastIndexOf("/") + 1);
       } else {
         this.info.path = "";
       }

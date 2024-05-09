@@ -1,13 +1,13 @@
 <template>
   <div style="margin-top: -2em">
-    <a-page-header title="Menu"></a-page-header>
+    <a-page-header title="Menu" ></a-page-header>
     <a-input-search
       class="search"
       v-model:value="value"
       size="large"
       @search="onSearch(value)"
     />
-    <div class="categ">
+    <div class="categ"  >
       <div>
         <button class="button2" style="width: 3em" @click="loadData"  :class="{ 'selected': activeCategory === null }">All</button>
       </div>
@@ -250,6 +250,7 @@ export default {
       });
     },
     loadData() {
+      this.activeCategory = null;
       const rid = localStorage.getItem("rid");
       MenuApi("list", { rid }).then((res) => {
         if (res.result_code === 0) {
@@ -348,7 +349,6 @@ export default {
 }
 .button2 {
   height: 5vh;
-  margin-left: 0.5vw;
   margin-bottom: 1vw;
   width: 150px;
   border: 1px solid rgb(221, 127, 48);
@@ -367,7 +367,8 @@ export default {
   margin-left: 2vw;
   display: flex;
   flex-direction: row;
-  width: 60%;
+  gap: 0.5em;
+  width: 59.8%;
   overflow-y: auto;
 }
 .categ::-webkit-scrollbar {
@@ -381,6 +382,7 @@ export default {
 .grid {
   width: 70%;
   margin-top: 0.5em;
+  top: 10em;
 }
 .add {
   top: 10vh;
@@ -406,6 +408,5 @@ export default {
   margin-left: 2vw;
   width: 60%;
   margin-bottom: 1em;
-
 }
 </style>

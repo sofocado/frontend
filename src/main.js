@@ -46,10 +46,12 @@ function timeFormat(t, hm) {
   if (mn.toString().length < 2) {
     mn = "0" + mn;
   }
-  if (hm) {
-    return `${day}/${m}/${y} ${h}:${mn}`;
+  if (hm == 1) {
+    return `${day}.${m}.${y} ${h}:${mn}`;
   }
-  return `${day}.${m}.${y}`;
+  else{
+    return `${h}:${mn}`
+  }
 }
 
 function getHourMinute(t, s) {

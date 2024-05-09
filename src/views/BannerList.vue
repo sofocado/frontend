@@ -2,29 +2,30 @@
   <div class="all">
     <a-page-header title="Banner"></a-page-header>
     <div v-if="info.path == ''" :key="info.name">
-       <h1>You don't have a banner! Click this button to add a new banner</h1>
-        <a-button class="button" @click="handleAdd">Add</a-button>
+      <h1>You don't have a banner! Click this button to add a new banner</h1>
+      <a-button class="button" @click="handleAdd">Add</a-button>
     </div>
-  
+
     <div v-if="info.path != ''" :key="info.name">
-      <a-card hoverable style="width: 300px">
+      <a-card hoverable style="width: 40%; margin-left: 1.9em">
         <template #cover>
-          <img
-            :alt="baseURL + info.path"
-            :src="baseURL + info.path"
-          />
+          <img :alt="baseURL + info.path" :src="baseURL + info.path" />
         </template>
         <template #actions>
           <a-popconfirm
-              title="Delete"
-              ok-text="Yes"
-              cancel-text="No"
-              @confirm="onDelete()"
-            >
-              <a>Delete</a>
-            </a-popconfirm>
+            title="Delete"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="onDelete()"
+          >
+            <a>Delete</a>
+          </a-popconfirm>
         </template>
-        <a-card-meta  :description="convertSecondsToTime(info.startTime) + '-'+ convertSecondsToTime(info.endTime) ">
+        <a-card-meta
+          :description="
+            $timeFormat(info.startTime, 1) + '-' + $timeFormat(info.endTime, 1)
+          "
+        >
         </a-card-meta>
       </a-card>
     </div>
@@ -34,9 +35,7 @@
 <script>
 import { BannerApi } from "@/api/banner";
 import { message } from "ant-design-vue";
-import dayjs from "dayjs";
 import config from "@/config/index.js";
-
 
 export default {
   data() {
@@ -45,9 +44,9 @@ export default {
         bannerId: "",
         path: "",
         startTime: 0,
-        endTime: 0
+        endTime: 0,
       },
-      baseURL: config.baseURL+"/"
+      baseURL: config.baseURL + "/",
     };
   },
   mounted() {
@@ -59,24 +58,21 @@ export default {
       const bannerId = "";
       BannerApi("get", { rid, bannerId })
         .then((res) => {
-          this.info = JSON.parse(JSON.stringify(res.data));
+          if (res.result_code == 0) {
+            this.info = JSON.parse(JSON.stringify(res.data));
+          }
+          else{
+            console.log("error")
+          }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          this.info.path = "";
         });
     },
     handleAdd() {
       this.$router.push({
         name: "BannerAdd",
       });
-    },
-    convertSecondsToTime(seconds) {
-      if (typeof seconds !== "number" || seconds < 0) {
-        return "Invalid input";
-      }
-      const time = dayjs.unix(seconds);
-
-      return time.format("DD.MM.YY HH:mm");
     },
     onDelete() {
       var bannerId = this.info.bannerId;

@@ -78,10 +78,14 @@
             <div>
               <h1 class="address" style="margin-left: 2vw">Work time</h1>
               <h6 class="work">
-                {{ convertSecondsToTime(userInfo.workstarttime) }}-{{
-                  convertSecondsToTime(userInfo.workendtime)
+                {{ $timeFormat(userInfo.workstarttime, 0) }}-{{
+                  $timeFormat(userInfo.workendtime, 0)
                 }}
               </h6>
+            </div>
+            <div>
+              <h1 class="address"  style="margin-left: 2vw">Phone Number:</h1>
+              <h6 class="work">{{ userInfo.phone }}</h6>
             </div>
           </div>
           <div class="ew">
@@ -119,7 +123,6 @@
 <script>
 import { RestaurantApi } from "@/api/restaurant";
 import { AuthorizationApi } from "@/api/auth";
-import dayjs from "dayjs";
 import config from "@/config/index.js";
 
 export default {
@@ -151,14 +154,6 @@ export default {
           console.log("Error");
         }
       });
-    },
-    convertSecondsToTime(seconds) {
-      if (typeof seconds !== "number" || seconds < 0) {
-        return "Invalid input";
-      }
-      const time = dayjs.unix(seconds);
-
-      return time.format("HH:mm");
     },
     park() {
       if (this.userInfo.parking == 1) {
