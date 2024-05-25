@@ -1,10 +1,10 @@
-let isReal = true;
+let isReal = false;
 
 function getBaseUrl() {
   if (isReal) {
     return "http://77.243.80.157:1001";
   } else {
-    return "http://192.168.0.123:1001"
+    return "http://192.168.0.107:1001"
   }
 }
 

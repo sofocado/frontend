@@ -61,8 +61,8 @@ export default {
     async setMenuList() {
       let arr = [
         {
-          name: "Home",
-          routerName: "Admin",
+          name: "Statistic",
+          routerName: "Statistic",
           icon: require("../images/home.png"),
           expand: true,
         },
