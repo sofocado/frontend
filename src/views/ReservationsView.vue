@@ -18,10 +18,10 @@
     />
 
     <a-row>
-      <template v-if="dat" >
+      <template v-if="dat">
         <a-col :span="16" class="Cards">
           <div v-for="(item, index) in filteredData" :key="item.name">
-               <ReservationCard
+            <ReservationCard
               :index="index + 1"
               :Username="item.name"
               :reservationStartTime="item.reservationStartTime"
@@ -42,7 +42,6 @@
                 Delete
               </button>
             </div>
-           
           </div>
         </a-col>
       </template>
@@ -100,7 +99,12 @@ export default {
       orderId: "",
       order: false,
       reservationStartTime: 0,
-      sort: "",
+      sort: [
+        {
+          key: "reservationStartTime",
+          isAsc: 1,
+        },
+      ],
       dat: true,
       activeCategory: false,
       currentPage: 1,
@@ -169,7 +173,7 @@ export default {
     },
     onDateChange(date) {
       console.log("Selected Date:", date);
-      this.selectedDate = date
+      this.selectedDate = date;
     },
   },
 };
