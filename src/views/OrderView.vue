@@ -3,7 +3,17 @@
     <a-spin />
   </div>
   <div>
-    <a-page-header style="width: 50%" title="Orders"></a-page-header>
+    <a-page-header style="width: 50%" title="Orders">
+      <a-range-picker
+        v-model:value="time"
+        :allowEmpty="[null, null]"
+        :allow-clear="true"
+        :show-time="{ format: 'HH:mm' }"
+        format="DD-MM-YY HH:mm"
+        style="margin-bottom: 1em; margin-left: 0.5em"
+      />
+      <a-button @click="loadData()" style="margin-left: 1em">Search</a-button>
+    </a-page-header>
     <a-row>
       <a-col :span="13" class="Cards">
         <div v-for="item in paginatedData" :key="item.name">
@@ -64,6 +74,7 @@ export default {
       currentPage: 1,
       reservationStartTime: 0,
       loading: false,
+      time: [null, null],
     };
   },
   mounted() {
@@ -81,7 +92,25 @@ export default {
       this.loading = true;
       const uid = "";
       const rid = localStorage.getItem("rid");
-      OrderApi("list", { uid, rid })
+
+      let time = [
+        {
+          key: "createTime",
+          min: 0,
+          max: 0,
+        },
+      ];
+
+      if (this.time) {
+        time[0].min = this.time[0]
+          ? Math.round(new Date(this.time[0]).getTime() / 1000)
+          : 0;
+        time[0].max = this.time[1]
+          ? Math.round(new Date(this.time[1]).getTime() / 1000)
+          : 0;
+      }
+
+      OrderApi("list", { uid, rid, time })
         .then((res) => {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows));
           this.totalItems = JSON.parse(JSON.stringify(res.data.recordcount));
@@ -90,7 +119,7 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          this.loading = false; 
+          this.loading = false;
         });
     },
 
