@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div style="margin-top: -2em">
     <a-page-header title="Menu" ></a-page-header>
     <a-input-search
@@ -228,6 +231,7 @@ export default {
         price: 0,
         rid: localStorage.getItem("rid"),
       },
+      loading: false,
     };
   },
   mounted() {
@@ -250,13 +254,21 @@ export default {
       });
     },
     loadData() {
+       this.loading = true;
       this.activeCategory = null;
       const rid = localStorage.getItem("rid");
-      MenuApi("list", { rid }).then((res) => {
+      MenuApi("list", { rid })
+      .then((res) => {
         if (res.result_code === 0) {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         }
-      });
+      })
+       .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     onSearch(value) {
       const filter = {
@@ -408,5 +420,17 @@ export default {
   margin-left: 2vw;
   width: 60%;
   margin-bottom: 1em;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

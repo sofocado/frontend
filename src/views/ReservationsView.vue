@@ -1,22 +1,30 @@
 <template>
-  <div>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
+  <div style="margin-bottom: 2em">
     <a-page-header style="width: 50%" title="Reservations"></a-page-header>
-    <div class="categ">
-      <div>
-        <button class="button2" @click="loadData">Upcoming</button>
-      </div>
-      <div>
-        <button class="button2" @click="loadData2">History</button>
-      </div>
-    </div>
-    <a-date-picker
-      class="date"
-      v-model:value="selectedDate"
-      placeholder="Select Date"
-      style="margin-bottom: 1em"
-      @change="onDateChange"
+    <a-range-picker
+      v-model:value="time"
+      :allowEmpty="[null, null]"
+      :allow-clear="true"
+      :show-time="{ format: 'HH:mm' }"
+      format="DD-MM-YY HH:mm"
+      style="margin-bottom: 1em; margin-left: 0.5em"
     />
+    <a-button @click="loadData()" style="margin-left: 1em">Search</a-button>
 
+    <a-dropdown class="drop">
+      <template #overlay>
+        <a-menu @click="handleMenuClick">
+          <a-menu-item key="1" @click="loadData"> Upcoming </a-menu-item>
+          <a-menu-item key="2" @click="loadData2"> History </a-menu-item>
+        </a-menu>
+      </template>
+      <a-button>
+        <img src="../images/filter.png" alt="" class="img" />
+      </a-button>
+    </a-dropdown>
     <a-row>
       <template v-if="dat">
         <a-col :span="16" class="Cards">
@@ -43,6 +51,13 @@
               </button>
             </div>
           </div>
+          <a-pagination
+            @change="handlePageChange"
+            :current="currentPage"
+            :total="totalRecords"
+            :pageSize="pageSize"
+            showLessItems
+          />
         </a-col>
       </template>
       <template v-else>
@@ -70,6 +85,13 @@
               </button>
             </div>
           </div>
+          <a-pagination
+            @change="handlePageChange1"
+            :current="currentPage"
+            :total="totalRecords"
+            :pageSize="pageSize"
+            showLessItems
+          />
         </a-col>
       </template>
 
@@ -110,7 +132,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalRecords: 0,
-      selectedDate: null,
+      time: [null, null],
+      loading: false,
     };
   },
   mounted() {
@@ -118,30 +141,63 @@ export default {
   },
   computed: {
     filteredData() {
-      const currentTime = new Date().getTime() / 1000.0; // Get current time in milliseconds
-      return this.dataList.filter(
-        (item) => item.reservationStartTime >= currentTime
-      );
+      const currentTime = new Date().getTime() / 1000.0;
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataList
+        .filter((item) => item.reservationStartTime >= currentTime)
+        .slice(startIndex, endIndex);
     },
     filteredData2() {
-      const currentTime = new Date().getTime() / 1000.0; // Get current time in milliseconds
-      return this.dataList.filter(
-        (item) => item.reservationStartTime <= currentTime
-      );
+      const currentTime = new Date().getTime() / 1000.0;
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataList
+        .filter((item) => item.reservationStartTime <= currentTime)
+        .slice(startIndex, endIndex);
     },
   },
   methods: {
+    handlePageChange(page) {
+      this.currentPage = page;
+      this.loadData();
+    },
+    handlePageChange1(page) {
+      this.currentPage = page;
+      this.loadData2();
+    },
     loadData() {
+      this.loading = true;
       this.dat = true;
       const uid = "";
       const rid = localStorage.getItem("rid");
       const sort = this.sort;
-      ReservationApi("list", { uid, rid, sort })
+      let time = [
+        {
+          key: "reservationStartTime",
+          min: 0,
+          max: 0,
+        },
+      ];
+
+      if (this.time) {
+        time[0].min = this.time[0]
+          ? Math.round(new Date(this.time[0]).getTime() / 1000)
+          : 0;
+        time[0].max = this.time[1]
+          ? Math.round(new Date(this.time[1]).getTime() / 1000)
+          : 0;
+      }
+
+      ReservationApi("list", { uid, rid, sort, time })
         .then((res) => {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; // Set loading state to false after API request
         });
     },
 
@@ -154,16 +210,21 @@ export default {
       });
     },
     loadData2() {
+      this.loading = true;
       this.dat = false;
       const uid = "";
       const rid = localStorage.getItem("rid");
       const sort = this.sort;
       ReservationApi("list", { uid, rid, sort })
         .then((res) => {
+          this.dataList = JSON.parse(JSON.stringify(res.data.rows));
           this.totalRecords = JSON.parse(JSON.stringify(res.data.recordcount));
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; // Set loading state to false after API request
         });
     },
     async view(orderId, reservationStartTime) {
@@ -171,15 +232,23 @@ export default {
       this.orderId = orderId;
       this.reservationStartTime = reservationStartTime;
     },
-    onDateChange(date) {
-      console.log("Selected Date:", date);
-      this.selectedDate = date;
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .Cards {
   position: relative;
   padding-left: 0.5em;
@@ -239,18 +308,19 @@ export default {
   background-color: rgb(221, 127, 48);
   color: white;
 }
-
-.categ {
-  display: flex;
-  flex-direction: row;
-  width: 60%;
-  overflow-y: auto;
-}
-.categ::-webkit-scrollbar {
-  display: none;
-}
 .button2.selected {
   background-color: rgb(221, 127, 48);
   color: white;
+}
+.selected {
+  background-color: blue;
+  color: white;
+}
+.img {
+  width: 2em;
+  margin-top: -0.5vh;
+}
+.drop {
+  margin-left: 7.5vw;
 }
 </style>

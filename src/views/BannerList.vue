@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div class="all">
     <a-page-header title="Banner"> <a-button class="button" @click="handleAdd">Add</a-button></a-page-header>
          
@@ -67,6 +70,7 @@ export default {
       },
       count: 0,
       baseURL: config.baseURL + "/",
+      loading: false,
     };
   },
   mounted() {
@@ -74,6 +78,7 @@ export default {
   },
   methods: {
     loadData() {
+       this.loading = true;
       const rid = localStorage.getItem("rid");
       BannerApi("list", { rid })
         .then((res) => {
@@ -84,7 +89,12 @@ export default {
             console.log("error");
           }
         })
-        .catch(() => {});
+        .catch(() => {
+
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     handleAdd() {
       this.$router.push({
@@ -142,5 +152,17 @@ export default {
   width: 100%;
   margin-top: 0.1em;
   margin-left: -2em;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

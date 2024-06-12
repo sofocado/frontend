@@ -21,7 +21,7 @@ const routes = [
       {
         path: "/statistic",
         name: "Statistic",
-        component: () => import("../views/statistic/StatisticsView.vue"),
+        component: () => import("../views/StatisticsView.vue"),
       },
       {
         path: "/profile",

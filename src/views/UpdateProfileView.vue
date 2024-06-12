@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div class="all">
     <div class="dashboard">
       <h1 style="color: black; font-size: 200%; text-align: center">
@@ -275,6 +278,7 @@ export default {
         parking: 0,
         prayingRoom: 0,
       },
+      loading: false,
     };
   },
   mounted() {
@@ -283,6 +287,7 @@ export default {
   },
   methods: {
     loadData() {
+       this.loading = true;
       const rid = localStorage.getItem("rid");
       RestaurantApi("get", { rid }).then((res) => {
         if (res.result_code === 0) {
@@ -297,7 +302,13 @@ export default {
         } else {
           console.log("Error");
         }
-      });
+      })
+       .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     categoryList() {
       CategoryApi("list", {}).then((res) => {
@@ -378,5 +389,17 @@ h2 {
   background-color: black;
   color: white;
   border: 1px solid black;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

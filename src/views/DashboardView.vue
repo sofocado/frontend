@@ -279,6 +279,7 @@ export default {
         avgCheque: 0,
         parking: 0,
         prayingRoom: 0,
+        loading: false,
       },
     };
   },
@@ -296,6 +297,7 @@ export default {
       });
     },
     restaurantAdd() {
+       this.loading = true;
       if (this.fileList.length > 0) {
          for(var item in this.fileList){
           this.info.path.push(this.fileList[item].response.files[0].path);
@@ -333,6 +335,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
         });
     },
     handleCancel() {

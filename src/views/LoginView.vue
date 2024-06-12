@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div class="all">
     <div class="login">
       <a-row>
@@ -65,10 +68,12 @@ export default {
         password: "",
       },
         errorMessage: "",
+        loading: false,
     };
   },
   methods: {
     onLogin() {
+       this.loading = true;
       AuthorizationApi("login", this.info)
         .then((res) => {
           if (res.result_code === 0 && res.data.user.rid != null) {
@@ -91,9 +96,11 @@ export default {
           }
          
         })
-        .catch((error) => {
+         .catch((error) => {
           console.log(error);
-          this.errorMessage = "Incorrect email or password.";
+        })
+        .finally(() => {
+          this.loading = false; 
         });
     },
   },
@@ -167,5 +174,17 @@ export default {
 .error-message {
   color: red;
   margin-top: 10px;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
