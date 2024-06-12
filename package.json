@@ -12,6 +12,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
+    "chart.js": "^4.4.3",
     "core-js": "^3.8.3",
     "css.gg": "^2.1.1",
     "date": "^2.0.5",
@@ -21,7 +22,9 @@
     "sass": "^1.71.0",
     "sass-loader": "^14.1.1",
     "vue": "^3.2.13",
+    "vue-chartjs": "^5.3.1",
     "vue-i18n": "^9.10.2",
+    "vue-pagination-2": "^3.1.0",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

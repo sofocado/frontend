@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div>
     <h1 style="color: black; font-size: 200%">Restaurant Profile</h1>
     <div class="all">
@@ -45,8 +48,9 @@
                 />
               </div>
             </div>
-            <div style="display: flex; flex-direction: row">
-              <div v-if="index >= 1" :key="item">
+            
+            <div class="outer">
+              <div v-if="index > 0" :key="item">
                 <div class="photo-back2">
                   <img
                     :src="baseURL + item"
@@ -54,9 +58,9 @@
                     class="photo2"
                     @click="handlePreview"
                   />
-                </div>
               </div>
             </div>
+           </div>
           </div>
 
           <h1 class="name">{{ userInfo.name }}</h1>
@@ -134,6 +138,7 @@ export default {
       userInfo: {
         path: []
       },
+      loading: false,
     };
   },
   mounted() {
@@ -146,14 +151,22 @@ export default {
   },
   methods: {
     loadData() {
+       this.loading = true;
       const rid = localStorage.getItem("rid");
-      RestaurantApi("get", { rid }).then((res) => {
+      RestaurantApi("get", { rid })
+      .then((res) => {
         if (res.result_code === 0) {
           this.userInfo = JSON.parse(JSON.stringify(res.data));
         } else {
           console.log("Error");
         }
-      });
+      }) 
+      .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     park() {
       if (this.userInfo.parking == 1) {
@@ -245,17 +258,21 @@ export default {
   object-fit: cover;
   display: block;
 }
+.outer{
+  display: flex;
+  flex-direction: row;
+}
 .photo-back2 {
   margin-top: 10%;
   margin-left: 40%;
   width: 3em;
   height: 3em;
-  overflow: hidden;
+  // overflow: hidden;
 }
 .photo2 {
   width: 100%;
   height: 100%;
-  display: block;
+  // display: block;
   border-radius: 10px;
 }
 .texts {
@@ -371,7 +388,7 @@ export default {
   z-index: 1;
 }
 :deep(.slick-arrow.custom-slick-arrow:before) {
-  display: none;
+  display: ruby;
 }
 :deep(.slick-arrow.custom-slick-arrow:hover) {
   color: #fff;
@@ -380,5 +397,17 @@ export default {
 
 :deep(.slick-slide h3) {
   color: #fff;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

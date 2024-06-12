@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div>
     <a-page-header title="Tables"></a-page-header>
     <div style="display: flex; fles-direction: row">
@@ -169,7 +172,8 @@ export default {
         tableCount: 0,
         rid: localStorage.getItem("rid"),
       },
-       qrValue: 'https://localhost:2002/' 
+       qrValue: 'https://localhost:2002/',
+       loading: false,
     };
   },
   mounted() {
@@ -178,6 +182,7 @@ export default {
   },
   methods: {
     tableAdd() {
+       this.loading = true;
       TableApi("add", this.info)
         .then((res) => {
           if (res.result_code === 0) {
@@ -190,15 +195,26 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
         });
     },
     loadData() {
+      this.loading = true;
       const rid = localStorage.getItem("rid");
-      TableApi("list", { rid }).then((res) => {
+      TableApi("list", { rid })
+      .then((res) => {
         if (res.result_code === 0) {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows));
         }
-      });
+      })
+       .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     deleteTable(value) {
       const tid = "";
@@ -308,5 +324,17 @@ export default {
 }
 h2 {
   font-size: 18px;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

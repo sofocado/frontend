@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div class="over">
     <div class="all">
       <a-modal
@@ -37,7 +40,7 @@
         </div>
 
         <div class="price">
-          <h2>{{ price }} TG</h2>
+          <h2>{{ price }} ₸</h2>
         </div>
       </a-card>
     </div>
@@ -135,5 +138,17 @@ export default {
 }
 .over {
   height: fit-content;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

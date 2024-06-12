@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div class="all">
     <a-page-header title="Reviews"></a-page-header>
      <div class="buttona">{{ pp(avgRate) }} <img src="../images/star2.png" style="width: 1.5em; heigth: auto; margin-top: -3px;" alt=""></div>
@@ -27,7 +30,8 @@ export default {
       avgRate: 0,
       dataList: [],
       columns: [],
-      testList: []
+      testList: [],
+      loading: false,
     };
   },
   created() {
@@ -38,8 +42,10 @@ export default {
   },
   methods: {
     loadData() {
+       this.loading = true;
         const rid = localStorage.getItem("rid");
-      ReviewApi("list", {rid}).then((res) => {
+      ReviewApi("list", {rid})
+      .then((res) => {
         if (res.result_code === 0 && res.data.rows.length > 0 ) {
           this.dataList = JSON.parse(JSON.stringify(res.data.rows[0].reviews));
           this.avgRate = JSON.parse(JSON.stringify(res.data.rows[0].avgRate.totalRate))
@@ -47,7 +53,13 @@ export default {
         else{
           console.log("")
         }
-      });
+      })
+       .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
+        });
     },
     pp(num){
       return num.toFixed(1)
@@ -121,5 +133,17 @@ export default {
 .button:hover {
   background-color: black;
   color: white;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -1,4 +1,7 @@
 <template>
+ <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div>
     <a-page-header title="Add Banner"></a-page-header>
     <a-form layout="vertical" :model="info">
@@ -92,11 +95,13 @@ export default {
         startTime: 0,
         rid: localStorage.getItem("rid"),
       },
+      loading: false,
     };
   },
 
   methods: {
     bannerAdd() {
+       this.loading = true;
         if (
         this.fileList.length > 0 &&
         this.fileList[0].response &&
@@ -125,6 +130,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
         });
     },
     handleCancel() {
@@ -146,6 +154,18 @@ export default {
 
 
 <style scoped>
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .button {
   width: 150px;
   background-color: rgb(221, 127, 48);

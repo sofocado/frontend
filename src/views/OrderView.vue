@@ -1,4 +1,7 @@
 <template>
+  <div class="loader" v-if="loading">
+    <a-spin />
+  </div>
   <div>
     <a-page-header style="width: 50%" title="Orders"></a-page-header>
     <a-row>
@@ -29,7 +32,12 @@
         </div>
       </a-col>
     </a-row>
-    <a-pagination v-model:current="currentPage" :total="totalItems" :page-size="5" show-less-items /> 
+    <a-pagination
+      v-model:current="currentPage"
+      :total="totalItems"
+      :page-size="5"
+      show-less-items
+    />
   </div>
 </template>
 
@@ -55,12 +63,13 @@ export default {
       totalItems: 0,
       currentPage: 1,
       reservationStartTime: 0,
+      loading: false,
     };
   },
   mounted() {
     this.loadData();
   },
-   computed: {
+  computed: {
     paginatedData() {
       const startIndex = (this.currentPage - 1) * 5;
       const endIndex = startIndex + 5;
@@ -69,6 +78,7 @@ export default {
   },
   methods: {
     async loadData() {
+      this.loading = true;
       const uid = "";
       const rid = localStorage.getItem("rid");
       OrderApi("list", { uid, rid })
@@ -78,9 +88,12 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false; 
         });
     },
-    
+
     async view(orderId, reservationStartTime) {
       this.order = true;
       this.orderId = orderId;
@@ -90,11 +103,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .inner3 {
   width: 100%;
   display: flex;
   padding: 1.5vw;
+  margin-top: -1em;
   flex-direction: column;
   background-color: white;
   border-radius: 20px;
