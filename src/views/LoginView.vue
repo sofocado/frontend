@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onLogin() {
-       this.loading = true;
+      this.loading = true
       AuthorizationApi("login", this.info)
         .then((res) => {
           if (res.result_code === 0 && res.data.user.rid != null) {
@@ -98,6 +98,7 @@ export default {
         })
          .catch((error) => {
           console.log(error);
+          this.errorMessage = "Incorrect email or password.";
         })
         .finally(() => {
           this.loading = false; 
